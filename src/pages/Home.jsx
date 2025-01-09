@@ -1,18 +1,16 @@
 import { motion } from "framer-motion";
-import Navbar from "../components/Navbar";
 import HeroSection from "../components/Herosection";
+import Banner from "../components/Banner";
+import Socialhandles from "../components/Socialhandles";
 
 function Home() {
   return (
-    <div>
-      <Navbar></Navbar>
+    <div className="bg-black">
       {/* Hero Section */}
-      <HeroSection></HeroSection>
-
-      {/* Features Section */}
-      
-      {/* Testimonials Preview */}
-
+      <HeroSection />
+      <Banner />
+      {/* Social Handles Section */}
+      <Socialhandles />
     </div>
   );
 }
