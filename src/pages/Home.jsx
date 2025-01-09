@@ -5,7 +5,7 @@ import HeroSection from "../components/Herosection";
 function Home() {
   return (
     <div>
-      <Navbar></Navbar>
+      {/* <Navbar></Navbar> */}
       {/* Hero Section */}
       <HeroSection></HeroSection>
 

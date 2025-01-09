@@ -9,7 +9,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative text-white text-center py-20 px-4 overflow-hidden min-h-screen">
+    <section className="relative text-white text-center py-20 px-4 overflow-hidden min-h-screen flex items-center justify-center">
       <video
         autoPlay
         muted
@@ -19,15 +19,15 @@ const HeroSection = () => {
         <source src={vid} type="video/mp4" />
       </video>
 
-      <div className="relative z-10 bg-opacity-50 h-full flex flex-col justify-center items-center">
+      <div className="relative z-10 bg-opacity-50 h-full flex flex-col justify-center items-center" >
         {/* Heading */}
         <h1
           data-aos="zoom-out"
           data-aos-once="true"
           data-aos-duration="500"
-          className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6"
+          className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 "
         >
-          Welcome to Cricket Academy Pro
+          Welcome to KYCA Cricket Academy 
         </h1>
 
         {/* Subheading */}
