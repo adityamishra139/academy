@@ -1,5 +1,5 @@
 import React from 'react';
-import banner1 from "../assets/banner.jpg";  // Replace with a cricket-related image
+import banner1 from "../assets/banner2.jpg";  // Replace with a cricket-related image
 import { FaTrophy } from 'react-icons/fa';  // Trophy icon
 import { MdSportsCricket } from 'react-icons/md';  // Cricket icon
 import { GiBat } from 'react-icons/gi';  // Bat icon
