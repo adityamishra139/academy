@@ -9,7 +9,8 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative text-white text-center py-20 px-4 overflow-hidden min-h-screen flex items-center justify-center">
+    <section className="relative text-white text-center min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Video */}
       <video
         autoPlay
         muted
@@ -19,15 +20,16 @@ const HeroSection = () => {
         <source src={vid} type="video/mp4" />
       </video>
 
-      <div className="relative z-10 bg-opacity-50 h-full flex flex-col justify-center items-center" >
+      {/* Content */}
+      <div className="relative z-10 bg-black bg-opacity-50 p-4 md:p-8 rounded-lg w-full max-w-4xl mx-auto flex flex-col items-center">
         {/* Heading */}
         <h1
           data-aos="zoom-out"
           data-aos-once="true"
           data-aos-duration="500"
-          className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 "
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight"
         >
-          Welcome to KYCA Cricket Academy 
+          Welcome to KYCA Cricket Academy
         </h1>
 
         {/* Subheading */}
@@ -35,22 +37,22 @@ const HeroSection = () => {
           data-aos="fade-up"
           data-aos-duration="500"
           data-aos-delay="100"
-          className="my-4 text-lg md:text-xl lg:text-2xl font-semibold"
+          className="text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-6 px-4 sm:px-8 leading-relaxed"
         >
           Train with professionals and elevate your cricket game to the next
           level.
         </p>
 
         {/* Call to Action Buttons */}
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 w-full px-6">
           <button
             onClick={handleClick}
-            className="bg-green-500 text-white py-3 px-6 rounded-full transform transition duration-500 hover:bg-green-600 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+            className="bg-green-500 text-white py-3 px-6 w-full sm:w-auto rounded-full transform transition duration-500 hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
           >
             Join Our Academy
           </button>
           <button
-            className="bg-transparent border-2 border-white text-white py-3 px-6 rounded-full transform transition duration-500 hover:bg-white hover:text-black hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+            className="bg-transparent border-2 border-white text-white py-3 px-6 w-full sm:w-auto rounded-full transform transition duration-500 hover:bg-white hover:text-black hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
             onClick={() => navigate("/schedule")}
           >
             View Fixtures
