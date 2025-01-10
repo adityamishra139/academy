@@ -11,11 +11,21 @@ function FloatingDockDemo() {
   ];
 
   return (
-    <div className="flex mt-16 justify-center h-[35rem] w-full">
-      <FloatingDock
-        mobileClassName="translate-y-20"
-        items={links}
-      />
+    <div className="flex flex-col justify-center items-center w-full px-4 sm:px-6 md:px-10 lg:px-20">
+      {/* Floating Dock Container */}
+      <div className="flex justify-center items-center w-full max-w-4xl mt-10 md:mt-16">
+        <FloatingDock
+          mobileClassName="translate-y-20"
+          items={links}
+        />
+      </div>
+
+      {/* Additional Spacing to Prevent Collision */}
+      <div className="mt-10 md:mt-16">
+        <p className="text-center text-gray-500 dark:text-neutral-400 text-sm md:text-base">
+          Connect with us on your favorite platform!
+        </p>
+      </div>
     </div>
   );
 }
