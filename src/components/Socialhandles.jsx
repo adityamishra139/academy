@@ -1,7 +1,10 @@
+// /src/components/SocialHandles.jsx
 import React from "react";
 import globe from "../assets/globe.mp4";
+import { FloatingDockDemo } from '../components/FloatingDockDemo';
 
-const Socialhandles = () => {
+
+const SocialHandles = () => {
   return (
     <div className="w-full bg-black py-10" data-aos="fade-up" data-aos-duration="1200">
       <div
@@ -24,20 +27,26 @@ const Socialhandles = () => {
         </div>
 
         {/* Text Container */}
-        <div
+        <div 
           className="text-white md:w-1/2 lg:w-1/3 px-4 md:px-0"
           data-aos="fade-up" data-aos-duration="1800"
         >
-          <h2 className="text-2xl font-semibold mb-4">Connect With Us</h2>
+          <div className="">
+            <h2 className="text-2xl font-semibold mb-4">Connect With Us</h2>
           <p className="text-lg leading-relaxed mb-6">
-            Follow us on social media to stay updated with the latest news,
-            features, and updates. We’d love to hear from you!
+            Follow us on social media to stay updated with the latest news, features, and updates. We’d love to hear from you!
           </p>
-          {/* You can add additional UI components here */}
+          </div>
+          
+          {/* Floating Dock Component */}
+          <div className="mt-4">
+          <FloatingDockDemo />
+        </div>
+         
         </div>
       </div>
     </div>
   );
 };
 
-export default Socialhandles;
+export default SocialHandles;
