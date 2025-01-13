@@ -1,24 +1,25 @@
 import React from 'react';
-import banner1 from "../assets/banner2.jpg";  // Replace with a cricket-related image
-import { FaTrophy } from 'react-icons/fa';  // Trophy icon
-import { MdSportsCricket } from 'react-icons/md';  // Cricket icon
-import { GiBat } from 'react-icons/gi';  // Bat icon
+import banner1 from "../assets/banner2.jpg";
+import { FaTrophy } from 'react-icons/fa';
+import { MdSportsCricket } from 'react-icons/md';
+import { GiBat } from 'react-icons/gi';
 
 const Banner = () => {
   return (
-    <div className='min-h-[500px] flex justify-center py-12 sm:py-0'>
+    <div className='min-h-[auto] sm:min-h-[500px] flex justify-center py-12 sm:py-0'> {/* Adjusted min-height */}
       <div className='container max-w-full bg-black py-8 px-4 sm:px-6 rounded-lg shadow-lg'>
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-8 items-center'>
-          {/* Image Section */}
-          <div data-aos="zoom-in" className='flex justify-center'>
-            <img 
-              src={banner1} 
-              alt="Cricket Academy" 
-              className='w-[90%] h-[700px] sm:h-[700px] object-cover shadow-xl rounded-xl' 
+          {/* Image Section (Hidden on smaller screens) */}
+          <div data-aos="zoom-in" className='hidden sm:block flex justify-center'> {/* hidden on mobile */}
+            <img
+              src={banner1}
+              alt="Cricket Academy"
+              className='w-[90%] h-[auto] sm:h-[700px] object-cover shadow-xl rounded-xl' // Adjusted height
             />
           </div>
-          {/* Text Section */}
-          <div className='flex flex-col justify-center gap-6'>
+
+          {/* Text Section (Full width on smaller screens) */}
+          <div className='flex flex-col justify-center gap-6 sm:col-span-1'> {/* Added col-span for mobile */}
             <h1 data-aos="fade-up" className="text-3xl sm:text-4xl font-bold text-green-500">Join Our Cricket Academy</h1>
             <p data-aos="fade-up" className='text-sm sm:text-base text-gray-400 tracking-wide leading-6'>
               Step up your cricket game with expert coaching and training. Whether you're a beginner or a professional, our Cricket Academy offers the best facilities and experienced coaches to help you reach your full potential.
