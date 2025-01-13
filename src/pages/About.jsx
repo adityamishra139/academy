@@ -5,6 +5,7 @@ import coach3 from "../assets/coach3.png";
 import coach4 from "../assets/coach4.png";
 import activity1 from "../assets/activity1.jpg";
 import activity2 from "../assets/activity2.jpg";
+import founder from "../assets/founder.jpg";  // Add this import for the founder's image
 
 function About() {
   return (
@@ -29,6 +30,34 @@ function About() {
           </p>
         </div>
       </section>
+      {/* Founder Section */}
+      <section className="py-16 bg-black" data-aos="fade-up" data-aos-duration="1200">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-extrabold text-center mb-12 tracking-wide text-green-500">
+            Our Founder
+          </h2>
+          <div
+            className="flex flex-col md:flex-row items-center gap-6"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+          >
+            <img
+              src={founder}
+              alt="Founder"
+              className="w-40 h-40 rounded-full shadow-lg mx-auto"
+            />
+            <div>
+              <h3 className="text-2xl font-bold">Dr. Arjun Rao</h3>
+              <p className="text-lg text-gray-300">
+                Dr. Arjun Rao is the visionary behind Karnataka Youth Cricket Academy. With a deep passion for cricket and years of experience in sports management, he started this academy to nurture young talent and make a lasting impact on cricket in the region.
+              </p>
+              <p className="mt-2 text-sm text-gray-400">
+                His vision is to provide a comprehensive environment that focuses not only on physical training but also on the mental well-being and overall development of young cricketers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Coaches Section */}
       <section className="py-16" data-aos="fade-right" data-aos-duration="1200">
@@ -51,17 +80,13 @@ function About() {
                 />
                 <div>
                   <h3 className="text-2xl font-bold">
-                    {["John Smith", "Jane Doe", "Robert Brown", "Emily Green"][
-                      index
-                    ]}
+                    {["John Smith", "Jane Doe", "Robert Brown", "Emily Green"][index]}
                   </h3>
                   <p className="text-lg text-gray-300">
-                    {["Head Coach", "Batting Coach", "Bowling Coach", "Fielding Coach"][
-                      index
-                    ]}
+                    {["Head Coach", "Batting Coach", "Bowling Coach", "Fielding Coach"][index]}
                   </p>
                   <p className="mt-2 text-sm text-gray-400">
-                    {[
+                    {[ 
                       "With over 15 years of experience, John specializes in developing all-round skills in players and has mentored numerous national and international cricketers.",
                       "Jane is an expert batting coach with a proven track record of elevating players' techniques and enabling them to perform under pressure.",
                       "Robert's expertise in bowling strategies and techniques has helped players enhance their skills, making him a sought-after coach for budding bowlers.",
@@ -102,12 +127,7 @@ function About() {
                   {["Coach A", "Coach B", "Coach C", "Coach D"][index]}
                 </h3>
                 <p className="text-sm text-gray-400">
-                  {`Renowned for ${[
-                    "leadership training",
-                    "batting drills",
-                    "pace strategies",
-                    "sharp fielding"
-                  ][index]}.`}
+                  {`Renowned for ${["leadership training", "batting drills", "pace strategies", "sharp fielding"][index]}.`}
                 </p>
               </div>
             ))}
@@ -138,7 +158,7 @@ function About() {
                 />
                 <div className="text-lg text-gray-300 md:w-1/2">
                   <p>
-                    {[
+                    {[ 
                       "Personal one-on-one training sessions for budding cricketers, leveraging state-of-the-art technology such as Pitch Vision, StanceBeam, and bowling machines.",
                       "Regular domestic and international tours to provide exposure to trainees, ensuring they experience diverse playing conditions and cultures."
                     ][index]}
@@ -149,6 +169,79 @@ function About() {
           </div>
         </div>
       </section>
+
+      {/* Services Section */}
+      <section className="py-16 bg-black" data-aos="fade-up" data-aos-duration="1200">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-extrabold text-center mb-12 tracking-wide text-green-500">
+            Our Services
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div
+              className="flex flex-col md:flex-row items-center gap-6"
+              data-aos="fade-right"
+              data-aos-duration="1000"
+            >
+              <div>
+                <h3 className="text-2xl font-bold">Pitches</h3>
+                <p className="mt-2 text-lg text-gray-300">
+                  Matting, Astroturf, and turf pitches so that the kids are exposed to different kinds of playing surfaces early on.
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex flex-col md:flex-row items-center gap-6"
+              data-aos="fade-left"
+              data-aos-duration="1000"
+            >
+              <div>
+                <h3 className="text-2xl font-bold">Fitness Centre</h3>
+                <p className="mt-2 text-lg text-gray-300">
+                  A newly constructed fitness centre with qualified professionals at hand to advocate the right methods of training, including Radha Krishnaswamy, the former fitness trainer of the India Women senior national team.
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex flex-col md:flex-row items-center gap-6"
+              data-aos="fade-right"
+              data-aos-duration="1000"
+            >
+              <div>
+                <h3 className="text-2xl font-bold">Hostel and Transportation</h3>
+                <p className="mt-2 text-lg text-gray-300">
+                  Comfortable hostel accommodations and reliable transportation for a hassle-free experience.
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex flex-col md:flex-row items-center gap-6"
+              data-aos="fade-left"
+              data-aos-duration="1000"
+            >
+              <div>
+                <h3 className="text-2xl font-bold">Floodlit Facility</h3>
+                <p className="mt-2 text-lg text-gray-300">
+                  Floodlit facility to ensure ease of practice without having to worry about constraints of time.
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex flex-col md:flex-row items-center gap-6"
+              data-aos="fade-right"
+              data-aos-duration="1000"
+            >
+              <div>
+                <h3 className="text-2xl font-bold">Technique Analysis</h3>
+                <p className="mt-2 text-lg text-gray-300">
+                  Technique analysis from our array of coaches well versed in the use of technology.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
     </div>
   );
 }

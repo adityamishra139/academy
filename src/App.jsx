@@ -4,10 +4,10 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Testimonials from "./pages/Testimonials";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
+import Contact from "./pages/Contact";
+import Gem from "./pages/Gem";
 function App() {
   useEffect(() => {
     AOS.init({
@@ -25,7 +25,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/testimonials" element={<Testimonials />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/gem" element={<Gem />} />
           </Routes>
         </main>
         <Footer />
