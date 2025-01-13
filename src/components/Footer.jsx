@@ -1,5 +1,6 @@
 import React from 'react';
 import { MdOutlineSportsCricket } from "react-icons/md";
+import { Link } from 'react-router-dom'; // Importing Link from react-router-dom
 
 const Footer = () => {
   return (
@@ -16,16 +17,16 @@ const Footer = () => {
           {/* Links */}
           <ul className="flex space-x-8 text-lg">
             <li>
-              <a href="#" className="hover:text-green-400">Home</a>
+              <Link to="/" className="hover:text-green-400">Home</Link>
+            </li>
+            {/* <li>
+              <Link to="/services" className="hover:text-green-400">Services</Link>
+            </li> */}
+            <li>
+              <Link to="/about" className="hover:text-green-400">About</Link>
             </li>
             <li>
-              <a href="#" className="hover:text-green-400">Services</a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-green-400">About</a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-green-400">Contact</a>
+              <Link to="/contact" className="hover:text-green-400">Contact</Link>
             </li>
           </ul>
 
@@ -56,8 +57,6 @@ const Footer = () => {
           <p className="text-gray-400 text-sm">
             &copy; {new Date().getFullYear()} KYCA. All rights reserved.
           </p>
-
-          
         </div>
       </div>
     </footer>

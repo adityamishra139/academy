@@ -38,6 +38,11 @@ const Navbar = ({ scrollToBanner }) => {
               Testimonials
             </Link>
           </li>
+          <li>
+            <Link to="/gem" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
+              KYCA Gems
+            </Link>
+          </li>
           {/* Add other links similarly */}
         </ul>
 
