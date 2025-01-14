@@ -21,7 +21,7 @@ const HeroSection = () => {
       </video>
 
       {/* Content */}
-      <div className="relative z-10 bg-black bg-opacity-50 p-4 md:p-8 rounded-lg w-full max-w-4xl mx-auto flex flex-col items-center">
+      <div className="relative z-10 bg-black bg-opacity-0 p-4 md:p-8 rounded-lg w-full max-w-4xl mx-auto flex flex-col items-center">
         {/* Heading */}
         <h1
           data-aos="zoom-out"
