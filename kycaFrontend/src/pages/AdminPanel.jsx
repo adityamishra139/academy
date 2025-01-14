@@ -56,12 +56,10 @@ const AdminPanel = () => {
     }
   };
 
-  const handleRemoveAdmin = async (id) => {
+  const handleRemoveAdmin = async (AdminEmail) => {
     try {
-      await axios.post(`http://localhost:3000/api/user/removeAdmin/${id}`);
-      setAdmins((prevAdmins) =>
-        prevAdmins.filter((admin) => admin.id !== id)
-      );
+      const response = await axios.post(`http://localhost:3000/api/user/delAdmin`,{AdminEmail});
+      console.log(response)
       setSuccess("Admin removed successfully.");
     } catch (err) {
       setError("Failed to remove admin. Please try again.");
@@ -120,7 +118,7 @@ const AdminPanel = () => {
                   <td className="border border-gray-600 text-center p-2">{admin.email}</td>
                   <td className="border border-gray-600 text-center p-2">
                     <button
-                      onClick={() => handleRemoveAdmin(admin.id)}
+                      onClick={() => handleRemoveAdmin(admin.email)}
                       className="bg-red-500 hover:bg-red-900 text-white px-4 py-2 rounded"
                     >
                       Remove

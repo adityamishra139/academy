@@ -4,33 +4,39 @@ import { FloatingDockDemo } from "../components/FloatingDockDemo";
 
 const SocialHandles = () => {
   return (
-    <div className="relative w-full bg-black py-10" data-aos="fade-up" data-aos-duration="1200">
-      {/* Video Container */}
+    <div
+      className="relative w-full bg-black py-12 overflow-hidden"
+      data-aos="fade-up"
+      data-aos-duration="1200"
+    >
+      {/* Video Background */}
       <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh]">
         <video
           autoPlay
           muted
           loop
-          className="absolute top-0 left-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
         >
           <source src={globe} type="video/mp4" />
         </video>
 
-        {/* Overlay: Text and Floating Dock */}
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6 sm:px-8 md:px-10"
-          data-aos="fade-up"
-          data-aos-duration="1800"
-        >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-green-500 font-semibold mb-4">
-            Connect With Us
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black z-10"></div>
+
+        {/* Text and Floating Dock Overlay */}
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 sm:px-8 md:px-10">
+          {/* Heading */}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-white leading-tight mb-4">
+            <span className="text-green-400">Follow</span> KYCA Cricket Academy
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-200 leading-relaxed mb-6 max-w-3xl">
-            Follow us on social media to stay updated with the latest news, features, and updates. We’d love to hear from you!
+
+          {/* Subheading */}
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light text-gray-300 max-w-2xl leading-relaxed mb-6">
+            Stay connected and join the conversation. Follow us for the latest updates, tips, and community stories from our cricket academy.
           </p>
 
-          {/* Floating Dock Component with Spacing */}
-          <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12">
+          {/* Floating Dock */}
+          <div className="mt-6 sm:mt-8">
             <FloatingDockDemo />
           </div>
         </div>
