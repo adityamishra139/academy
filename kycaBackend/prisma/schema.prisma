@@ -12,6 +12,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  id        Int       @id @default(autoincrement())
+  name      String    
+  email     String  
+  password  String
+  isAdmin   Boolean   @default(false)
+}
+
 model Inquiry {
   id        Int      @id @default(autoincrement())
   name      String
