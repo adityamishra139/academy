@@ -206,4 +206,19 @@ catch (error) {
   }
 })
 
+user.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
+	const response =await prisma.user.findMany({
+		where:{
+			isAdmin:true
+		},
+		select:{
+			id:true,
+			name:true,
+			email:true,
+			isAdmin:true
+		}
+	})
+	res.status(200).json({"msg":"Admin list sent" , list:response} )
+})
+
 export default user;
