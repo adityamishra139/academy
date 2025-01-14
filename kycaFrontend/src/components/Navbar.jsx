@@ -43,6 +43,11 @@ const Navbar = ({ scrollToBanner }) => {
               KYCA Gems
             </Link>
           </li>
+          <li>
+            <Link to="/adminpanel" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
+              Admin Panel
+            </Link>
+          </li>
           {/* Add other links similarly */}
         </ul>
 
