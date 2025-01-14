@@ -8,6 +8,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Contact from "./pages/Contact";
 import Gem from "./pages/Gem";
+import AdminPanel from "./pages/AdminPanel";
 function App() {
   useEffect(() => {
     AOS.init({
@@ -27,6 +28,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/gem" element={<Gem />} />
+            <Route path="/adminpanel" element={<AdminPanel/>} />
           </Routes>
         </main>
         <Footer />
