@@ -168,6 +168,7 @@ catch (error) {
 
 user.post('/delAdmin' , async(req:Request , res:Response):Promise<void>=>{
 	const {email} = req.body;
+	console.log(email);
 	const inputValidation = z.string().email().safeParse(email)
 	if(!inputValidation.success)
 	{
