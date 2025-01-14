@@ -19,113 +19,191 @@ interface User {
   id: number;
   name: string;
   email: string;
+  isAdmin : boolean
 }
 
 async function verifyUser(email: string, password: string): Promise<User | null> {
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        email: email
-      }
-    });
+	const user = await prisma.user.findFirst({
+	  where: {
+		email: email
+	  }
+	});
 
-    if (!user) {
-      return null;
-    }
+	if (!user) {
+	  return null;
+	}
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (isPasswordValid) {
-      return { id: user.id, name: user.name, email: user.email };
-    } else {
-      return null;
-    }
+	const isPasswordValid = await bcrypt.compare(password, user.password);
+	if (isPasswordValid) {
+	  return { id: user.id, name: user.name, email: user.email , isAdmin : user.isAdmin };
+	} else {
+	  return null;
+	}
   } catch (e) {
-    console.error('Error in verifying user', e);
-    return null;
+	console.error('Error in verifying user', e);
+	return null;
   }
 }
 
 async function insertUser(name: string, email: string, password: string): Promise<User | null> {
   try {
-    const saltRounds = Number(process.env.saltRounds);
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+	const saltRounds = Number(process.env.saltRounds);
+	const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = await prisma.user.create({
-      data: {
-        name: name,
-        email: email,
-        password: hashedPassword,
-      }
-    });
+	const newUser = await prisma.user.create({
+	  data: {
+		name: name,
+		email: email,
+		password: hashedPassword,
+	  }
+	});
 
-    return { id: newUser.id, name: newUser.name, email: newUser.email };
+	return { id: newUser.id, name: newUser.name, email: newUser.email , isAdmin : newUser.isAdmin };
   } catch (e) {
-    console.error('Error in inserting user:', e);
-    return null;
+	console.error('Error in inserting user:', e);
+	return null;
   }
 }
 
 user.post("/signin", async (req: Request, res: Response):Promise<void> => {
   const { name, email, password } = req.body;
   const inputValidation = userSchema.safeParse({
-    name,
-    email,
-    password
+	name,
+	email,
+	password
   });
 
   if (!inputValidation.success) {
-     res.status(400).json({ "msg": "InputValidation failed" });
-     console.log(inputValidation.error)
-     return
+	 res.status(400).json({ "msg": "InputValidation failed" });
+	 console.log(inputValidation.error)
+	 return
   }
 
   try {
-    const userExists = await verifyUser(email, password);
+	const userExists = await verifyUser(email, password);
 
-    if (userExists) {
-        res.json({ "msg": "User already exists" });
-      return 
-    }
+	if (userExists) {
+		res.json({ "msg": "User already exists" });
+	  return 
+	}
 
-    const createdUser = await insertUser(name, email, password);
+	const createdUser = await insertUser(name, email, password);
 
-    if (createdUser) {
-        res.json({ msg: "User successfully created", user: createdUser });
-      return 
-    } else {
-        res.status(500).json({ "msg": "Error in user creation" });
-      return
-    }
+	if (createdUser) {
+		res.json({ msg: "User successfully created", user: createdUser });
+	  return 
+	} else {
+		res.status(500).json({ "msg": "Error in user creation" });
+	  return
+	}
   } catch (e) {
-    console.error('Error during signup:', e);
-    res.status(500).json({ "msg": "An error occurred" });
-    return 
+	console.error('Error during signup:', e);
+	res.status(500).json({ "msg": "An error occurred" });
+	return 
   }
 });
 
 user.post('/signup',async(req:Request , res:Response):Promise<void>=>{
-    const {email,password} = req.body;
-    const inputValidation = userSchema.safeParse({
-        email,
-        password
-    })
-    if (!inputValidation.success) {
-        res.status(400).json({ "msg": "InputValidation failed" });
-        console.log(inputValidation.error)
-        return
-     }
-    try{
-        const userExists = await verifyUser(email,password);
-        if (userExists) {
-            res.json({ "msg": "Signed in"  , user:userExists});
-          return 
-        }
-    }
-    catch(e)
-    {
-        res.json({"msg" : "Error in signing up" , error:e})
-        return
-    }
+	const {email,password} = req.body;
+	const inputValidation = userSchema.safeParse({
+		email,
+		password
+	})
+	if (!inputValidation.success) {
+		res.status(400).json({ "msg": "InputValidation failed" });
+		console.log(inputValidation.error)
+		return
+	 }
+	try{
+		const userExists = await verifyUser(email,password);
+		if (userExists) {
+			res.json({ "msg": "Signed in"  , user:userExists});
+		  return 
+		}
+		res.json({"msg":"user does not exist"})
+	}
+	catch(e)
+	{
+		res.json({"msg" : "Error in signing up" , error:e})
+		return
+	}
+})
+
+user.post('/addAdmin' , async(req:Request , res:Response):Promise<void>=>{
+	const {email} = req.body;
+	const inputValidation = z.string().email().safeParse(email)
+	if(!inputValidation.success)
+	{
+		res.json({"msg":"Invalid email"})
+		return
+	}
+	try{
+	const userResponse =await  prisma.user.findFirst({
+		where:{
+			email:email
+		}
+	})
+	if(!userResponse)
+	{
+		res.json({"msg":"No user found"});
+		return
+	}
+	const response =await prisma.user.update({
+		where:{
+			id:userResponse.id
+		},
+		data:{
+			isAdmin:true
+		}
+	})
+	res.json({ "msg": "Admin created successfully"});
+}
+catch (error) {
+	console.error(error);
+	res.status(500).json({ "msg": "An error occurred while adding admin" });
+  }
+})
+
+
+user.post('/delAdmin' , async(req:Request , res:Response):Promise<void>=>{
+	const {email} = req.body;
+	const inputValidation = z.string().email().safeParse(email)
+	if(!inputValidation.success)
+	{
+		res.json({"msg":"Invalid email"})
+		return
+	}
+	try{
+	const userResponse =await  prisma.user.findFirst({
+		where:{
+			email:email
+		}
+	})
+	if(!userResponse)
+	{
+		res.json({"msg":"No user found"});
+		return
+	}
+	if(userResponse.isAdmin){
+	const response =await prisma.user.update({
+		where:{
+			id:userResponse.id
+		},
+		data:{
+			isAdmin:false
+		}
+	})
+	res.json({ "msg": "Admin deleted successfully"});
+}
+else{
+	res.json({"msg":"Not an admin"})
+}
+}
+catch (error) {
+	console.error(error);
+	res.status(500).json({ "msg": "An error occurred while adding admin" });
+  }
 })
 
 export default user;
