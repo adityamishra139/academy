@@ -48,10 +48,16 @@ const AdminPanel = () => {
   const handleAddAdmin = async () => {
     try {
       const response = await axios.post("http://localhost:3000/api/user/addAdmin", { email });
+      console.log(response)
+      if(response.data.msg === "Invalid email" || response.data.msg === "No user found")
+      {
+        setSuccess("Failed to add admin")
+      }
+      else
       setSuccess("Admin added successfully.");
       setEmail(""); 
-      fetchAdmins(); // Refresh admins list after adding new admin
     } catch (err) {
+      console.log(err)
       setError("Failed to add admin. Please try again.");
     }
   };
@@ -74,7 +80,8 @@ const AdminPanel = () => {
       <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
       <hr className="border-gray-800" />
       <br />
-      {success && <p className="text-green-500 mb-4">{success}</p>}
+      {success && success == "Failed to add admin" && <p className="text-red-500 mb-4">{success}</p>}
+      {success && success != "Failed to add admin" && <p className="text-green-500 mb-4">{success}</p>}
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       {/* ADD ADMIN Section */}
