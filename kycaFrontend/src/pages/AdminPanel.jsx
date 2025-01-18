@@ -11,17 +11,7 @@ const AdminPanel = () => {
   const [email, setEmail] = useState(""); // State to hold the email input
 
   useEffect(() => {
-    const fetchInquiries = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/inquiries");
-        setInquiries(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch inquiries. Please try again later.");
-        setLoading(false);
-      }
-    };
-
+    
     const fetchAdmins = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/user/getAdmins");
@@ -35,7 +25,24 @@ const AdminPanel = () => {
     fetchAdmins();
     setListChange(false); // Reset the listChange flag after fetching
   }, [listChange]); // Dependency on listChange to re-fetch
-
+  
+  useEffect(()=>{
+    const interval = setInterval(() => {
+      fetchInquiries();
+    },60000)  
+    return()=> clearInterval(interval)
+  })
+  
+  const fetchInquiries = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/inquiries");
+      setInquiries(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to fetch inquiries. Please try again later.");
+      setLoading(false);
+    }
+  };
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/api/inquiries/${id}`);
