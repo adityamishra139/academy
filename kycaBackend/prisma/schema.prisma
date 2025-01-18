@@ -19,7 +19,7 @@ model User {
   email     String  
   password  String
   isAdmin   Boolean   @default(false)
-  phone     String    @db.VarChar(10) // Add phone number for the User
+  phone     String?    @db.VarChar(10) // Add phone number for the User
 }
 
 model Inquiry {
