@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = ({ scrollToBanner }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isAdmin,setIsAdmin] = useState(false)
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -56,7 +56,7 @@ const Navbar = ({ scrollToBanner }) => {
           onClick={scrollToBanner}
           className="hidden md:block bg-green-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-green-600 hover:text-white hover:scale-95 transition duration-200"
         >
-          Get Started
+          Login
         </button>
 
         {/* Mobile Menu Toggle */}

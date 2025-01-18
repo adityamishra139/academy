@@ -7,6 +7,7 @@ const AdminPanel = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [listChange, setListChange] = useState(false); // Fixed to camelCase
   const [email, setEmail] = useState(""); // State to hold the email input
 
   useEffect(() => {
@@ -24,14 +25,16 @@ const AdminPanel = () => {
     const fetchAdmins = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/user/getAdmins");
-        setAdmins(response.data.list); // Extracting 'list' array from the response
+        setAdmins(response.data.list || []); // Ensure admins is always set to an array
       } catch (err) {
+        setError("Failed to fetch admins. Please try again later.");
       }
     };
 
     fetchInquiries();
     fetchAdmins();
-  }, []);
+    setListChange(false); // Reset the listChange flag after fetching
+  }, [listChange]); // Dependency on listChange to re-fetch
 
   const handleDelete = async (id) => {
     try {
@@ -40,6 +43,7 @@ const AdminPanel = () => {
         prevInquiries.filter((inquiry) => inquiry.id !== id)
       );
       setSuccess("Inquiry deleted successfully.");
+      setListChange(true); // Trigger re-fetch
     } catch (err) {
       setError("Failed to delete inquiry. Please try again.");
     }
@@ -48,25 +52,23 @@ const AdminPanel = () => {
   const handleAddAdmin = async () => {
     try {
       const response = await axios.post("http://localhost:3000/api/user/addAdmin", { email });
-      console.log(response)
-      if(response.data.msg === "Invalid email" || response.data.msg === "No user found")
-      {
-        setSuccess("Failed to add admin")
+      if (response.data.msg === "Invalid email" || response.data.msg === "No user found") {
+        setSuccess("Failed to add admin");
+      } else {
+        setSuccess("Admin added successfully.");
       }
-      else
-      setSuccess("Admin added successfully.");
       setEmail(""); 
+      setListChange(true); // Trigger re-fetch
     } catch (err) {
-      console.log(err)
       setError("Failed to add admin. Please try again.");
     }
   };
 
   const handleRemoveAdmin = async (AdminEmail) => {
     try {
-      const response = await axios.post(`http://localhost:3000/api/user/delAdmin`,{AdminEmail});
-      console.log(response)
+      const response = await axios.post(`http://localhost:3000/api/user/delAdmin`, { email: AdminEmail });
       setSuccess("Admin removed successfully.");
+      setListChange(true); // Trigger re-fetch
     } catch (err) {
       setError("Failed to remove admin. Please try again.");
     }
@@ -80,8 +82,8 @@ const AdminPanel = () => {
       <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
       <hr className="border-gray-800" />
       <br />
-      {success && success == "Failed to add admin" && <p className="text-red-500 mb-4">{success}</p>}
-      {success && success != "Failed to add admin" && <p className="text-green-500 mb-4">{success}</p>}
+      {success && success !== "Failed to add admin" && <p className="text-green-500 mb-4">{success}</p>}
+      {success && success === "Failed to add admin" && <p className="text-red-500 mb-4">{success}</p>}
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       {/* ADD ADMIN Section */}
