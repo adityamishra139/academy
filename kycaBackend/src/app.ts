@@ -3,12 +3,17 @@ import { PrismaClient } from '@prisma/client';
 import inquiryRoutes from './routes/inquiry';
 import user from './routes/user';
 import cors from 'cors';
+import routerA from './routes/admin';
+
 const app: Application = express();
 const prisma = new PrismaClient();
+
 app.use(express.json());
 app.use(cors());
+app.use('/api/admin',routerA)
 app.use('/api/user',user)
 app.use('/api/inquiries',inquiryRoutes);
+
 app.listen(3000, async () => {
   try {
     await prisma.$connect(); 
