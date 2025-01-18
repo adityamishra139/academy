@@ -13,12 +13,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
+model User {
   id        Int       @id @default(autoincrement())
   name      String    
   email     String  
   password  String
   isAdmin   Boolean   @default(false)
+  phone     String    @db.VarChar(10) // Add phone number for the User
 }
 
 model Inquiry {
@@ -27,5 +28,7 @@ model Inquiry {
   email     String
   message   String
   createdAt DateTime @default(now())
+  phone     String   @db.VarChar(10) // Add phone number for the Inquiry
 }
+
 
