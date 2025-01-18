@@ -1,16 +1,16 @@
-import { Router } from 'express';
+import { Request,Response,Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const router = Router();
 
 // Create a new inquiry
-router.post('/', async (req, res) => {
-  const { name, email, message } = req.body;
+router.post('/', async (req: Request, res: Response) => {
+  const { name, email, message, phone } = req.body;
 
   try {
     const inquiry = await prisma.inquiry.create({
-      data: { name, email, message },
+      data: { name, email, message, phone },
     });
     res.status(201).json(inquiry);
   } catch (error) {
@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Error creating inquiry' });
   }
 });
+
 
 // Get all inquiries
 router.get('/', async (_req, res) => {
