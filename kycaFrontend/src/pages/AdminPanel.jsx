@@ -4,6 +4,7 @@ import axios from "axios";
 const AdminPanel = () => {
   const [gems, setGems] = useState([]); // New state for gems
   const [inquiries, setInquiries] = useState([]);
+  const [feedbacks , setFeedbacks] = useState([])
   const [admins, setAdmins] = useState([]); // State to hold the admins
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,6 +24,18 @@ const AdminPanel = () => {
         setError("Failed to fetch admins. Please try again later.");
       }
     };
+
+    const fetchFeedbacks = async()=>{
+      try{
+        const response = await axios.get('http://localhost:3000/api/admin/getAllFeedback')
+        console.log(response.data.feedback)
+        setFeedbacks(response.data.feedback)
+      }
+      catch(e){
+        console.log(e);
+      }
+    }
+
     const fetchGems = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/gems"); // API endpoint for gems
@@ -32,6 +45,7 @@ const AdminPanel = () => {
       }
     };
 
+    fetchFeedbacks()
     fetchGems();
     fetchInquiries();
     fetchAdmins();
@@ -44,7 +58,7 @@ const AdminPanel = () => {
     },60000)  
     return()=> clearInterval(interval)
   })
-  
+
   const fetchInquiries = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/inquiries");
@@ -67,6 +81,29 @@ const AdminPanel = () => {
       setError("Failed to delete inquiry. Please try again.");
     }
   };
+
+  const handleDeleteFeedback = async(id)=>{
+    try{
+      await axios.post('http://localhost:3000/api/admin/delFeedback' , {id})
+      setSuccess("Feedback deleted!")
+      setListChange(true); 
+    }
+    catch(e)
+    {
+      setError('Failed to delete Feedback!')
+    }
+  }
+
+  const handleChooseFeedback = async(id,choice) =>{
+    try{
+      await axios.post('http://localhost:3000/api/admin/chooseFeedback' , {id})
+      setSuccess(`Feedback ${choice == 1?'chosen':'unchosen'}`)
+    }
+    catch(e)
+    {
+      setError(`Failed to ${choice == 1?'choose':'unchoose'} feedback`)
+    }
+  }
 
   const handleAddAdmin = async () => {
     try {
@@ -160,8 +197,6 @@ const AdminPanel = () => {
 
 
 
-
-
       {/* ADMINS Section */}
       <div className="mb-6">
         <h2 className="text-xl font-bold mb-4">ADMINS</h2>
@@ -197,8 +232,6 @@ const AdminPanel = () => {
           <p className="text-center">No admins found.</p>
         )}
       </div>
-
-
 
 
       {/* INQUIRIES Section */}
@@ -244,8 +277,6 @@ const AdminPanel = () => {
 
 
       {/*GEMS section*/}
-
-
       {/* Add Gem */}
       <h2 className="text-xl font-bold mb-4">ADD GEM</h2>
       <div className="flex items-center space-x-4 mb-6">
@@ -275,8 +306,6 @@ const AdminPanel = () => {
           Add Gem
         </button>
       </div>
-
-
       
       {/*Display Gem*/}
       <div className="mb-6">
@@ -315,6 +344,62 @@ const AdminPanel = () => {
           <p className="text-center">No gems found.</p>
         )}
       </div>
+
+      {/* Feedbacks Section */}
+<div className="mb-6">
+  <h2 className="text-xl font-bold mb-4">FEEDBACKS</h2>
+  {feedbacks.length > 0 ? (
+    <table className="w-full table-auto border-collapse">
+      <thead>
+        <tr className="bg-gray-800">
+          <th className="border border-gray-600 p-2">ID</th>
+          <th className="border border-gray-600 p-2">Name</th>
+          <th className="border border-gray-600 p-2">Email</th>
+          <th className="border border-gray-600 p-2">Rating</th>
+          <th className="border border-gray-600 p-2">Message</th>
+          <th className="border border-gray-600 p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {feedbacks.map((feedback) => (
+          <tr key={feedback.id} className="hover:bg-gray-700">
+            <td className="border border-gray-600 text-center p-2">{feedback.id}</td>
+            <td className="border border-gray-600 text-center p-2">{feedback.name}</td>
+            <td className="border border-gray-600 text-center p-2">{feedback.email}</td>
+            <td className="border border-gray-600 text-center p-2">{feedback.rating}</td>
+            <td className="border border-gray-600 text-center p-2 overflow-hidden text-ellipsis whitespace-nowrap" style={{ maxWidth: '150px' }}>
+              {feedback.message}
+            </td>
+            <td className="border border-gray-600 text-center p-2 flex justify-center gap-2">
+              <button
+                onClick={() => handleChooseFeedback(feedback.id,1)}
+                className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200"
+              >
+                Choose
+              </button>
+              <button
+                onClick={() => handleChooseFeedback(feedback.id,2)}
+                className="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded transition duration-200"
+              >
+                Unchoose
+              </button>
+              <button
+                onClick={() => handleDeleteFeedback(feedback.id)}
+                className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded transition duration-200"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p className="text-center">No feedbacks found.</p>
+  )}
+</div>
+
+
     </div>
   );
 };
