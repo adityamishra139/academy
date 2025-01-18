@@ -66,7 +66,7 @@ async function insertUser(name: string, email: string, password: string): Promis
   }
 }
 
-user.post("/signin", async (req: Request, res: Response):Promise<void> => {
+user.post("/signup", async (req: Request, res: Response):Promise<void> => {
   const { name, email, password } = req.body;
   const inputValidation = userSchema.safeParse({
 	name,
@@ -104,7 +104,7 @@ user.post("/signin", async (req: Request, res: Response):Promise<void> => {
   }
 });
 
-user.post('/signup',async(req:Request , res:Response):Promise<void>=>{
+user.post('/signin',async(req:Request , res:Response):Promise<void>=>{
 	const {email,password} = req.body;
 	const inputValidation = userSchema.safeParse({
 		email,
