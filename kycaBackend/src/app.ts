@@ -1,19 +1,21 @@
 import express, { Application } from 'express';
 import { PrismaClient } from '@prisma/client';
 import inquiryRoutes from './routes/inquiry';
-import user from './routes/user';
+import userRoutes from './routes/user';
 import cors from 'cors';
-import routerA from './routes/admin';
-
+import adminRoutes from './routes/admin';
+import gemRoutes from './routes/gem'
+import path from 'path';
 const app: Application = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
 app.use(cors());
-app.use('/api/admin',routerA)
-app.use('/api/user',user)
+app.use('/api/admin',adminRoutes)
+app.use('/api/user',userRoutes)
 app.use('/api/inquiries',inquiryRoutes);
-
+app.use('/api/gems',gemRoutes)
+app.use('/uploads', express.static(path.join(__dirname, './../uploads')));
 app.listen(3000, async () => {
   try {
     await prisma.$connect(); 
