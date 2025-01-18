@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import { error } from 'console';
 
-const user = Router();
+const router = Router();
 const prisma = new PrismaClient();
 dotenv.config();
 
@@ -66,7 +66,7 @@ async function insertUser(name: string, email: string, password: string): Promis
   }
 }
 
-user.post("/signin", async (req: Request, res: Response):Promise<void> => {
+router.post("/signin", async (req: Request, res: Response):Promise<void> => {
   const { name, email, password } = req.body;
   const inputValidation = userSchema.safeParse({
 	name,
@@ -104,7 +104,7 @@ user.post("/signin", async (req: Request, res: Response):Promise<void> => {
   }
 });
 
-user.post('/signup',async(req:Request , res:Response):Promise<void>=>{
+router.post('/signup',async(req:Request , res:Response):Promise<void>=>{
 	const {email,password} = req.body;
 	const inputValidation = userSchema.safeParse({
 		email,
@@ -130,7 +130,7 @@ user.post('/signup',async(req:Request , res:Response):Promise<void>=>{
 	}
 })
 
-user.post('/addAdmin' , async(req:Request , res:Response):Promise<void>=>{
+router.post('/addAdmin' , async(req:Request , res:Response):Promise<void>=>{
 	const {email} = req.body;
 	const inputValidation = z.string().email().safeParse(email)
 	if(!inputValidation.success)
@@ -166,7 +166,7 @@ catch (error) {
 })
 
 
-user.post('/delAdmin' , async(req:Request , res:Response):Promise<void>=>{
+router.post('/delAdmin' , async(req:Request , res:Response):Promise<void>=>{
 	const {email} = req.body;
 	console.log(email);
 	const inputValidation = z.string().email().safeParse(email)
@@ -207,7 +207,7 @@ catch (error) {
   }
 })
 
-user.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
+router.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
 	const response =await prisma.user.findMany({
 		where:{
 			isAdmin:true
@@ -222,4 +222,4 @@ user.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
 	res.status(200).json({"msg":"Admin list sent" , list:response} )
 })
 
-export default user;
+export default router;

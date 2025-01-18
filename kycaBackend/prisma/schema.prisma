@@ -31,4 +31,9 @@ model Inquiry {
   phone     String   @db.VarChar(10) // Add phone number for the Inquiry
 }
 
-
+model Gem {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(255) // Player's name
+  team  String  @db.VarChar(255) // Team details
+  img   String  @db.VarChar(255) // Path or URL to the image
+}
