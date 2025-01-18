@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../atoms';
 
 const Dialogbox = ({ onClose }) => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
-  const [formData, setFormData] = useState({ name: '', message: '' });
+  const user = useRecoilValue(userState)
+  const [formData, setFormData] = user.name === "" ? useState({ name: '', message: '' }): useState({name:user.name , message:''});
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,6 +18,7 @@ const Dialogbox = ({ onClose }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData.name)
   };
 
   return (

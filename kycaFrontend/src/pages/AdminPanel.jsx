@@ -137,8 +137,8 @@ const AdminPanel = () => {
         </button>
       </div>
 
-           {/* GEM List Section */}
-           <div className="mb-6">
+       {/* GEM List Section */}
+       <div className="mb-6">
         <h2 className="text-xl font-bold mb-4">GEMS</h2>
         {gems.length > 0 ? (
           <table className="w-full table-auto border-collapse">

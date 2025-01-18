@@ -66,7 +66,7 @@ async function insertUser(name: string, email: string, password: string): Promis
   }
 }
 
-router.post("/signin", async (req: Request, res: Response):Promise<void> => {
+router.post("/signup", async (req: Request, res: Response):Promise<void> => {
   const { name, email, password } = req.body;
   const inputValidation = userSchema.safeParse({
 	name,
@@ -104,7 +104,7 @@ router.post("/signin", async (req: Request, res: Response):Promise<void> => {
   }
 });
 
-router.post('/signup',async(req:Request , res:Response):Promise<void>=>{
+router.post('/signin',async(req:Request , res:Response):Promise<void>=>{
 	const {email,password} = req.body;
 	const inputValidation = userSchema.safeParse({
 		email,
