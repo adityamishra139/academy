@@ -1,15 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 const ContactUs = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    enquiry: "",
+  });
+
+  const [responseMessage, setResponseMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    try {
+      const response = await axios.post("http://localhost:3000/api/inquiries", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.enquiry,
+      });
+
+      if (response.status === 201) {
+        setResponseMessage("Your enquiry was submitted successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          enquiry: "",
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting the enquiry:", error);
+      setResponseMessage("There was an error submitting your enquiry. Please try again.");
+    }
+  };
+
   return (
     <div className="bg-black text-green-500 min-h-screen">
       {/* Contact Us Section */}
-      <section
-        className="py-16"
-        data-aos="fade-up"
-        data-aos-duration="1000"
-        data-aos-once="true"
-      >
+      <section className="py-16">
         <div className="container mx-auto text-center px-4">
           <h2 className="text-4xl font-extrabold mb-8 tracking-wide">
             Contact Us
@@ -23,19 +58,14 @@ const ContactUs = () => {
       </section>
 
       {/* Contact Form Section */}
-      <section
-        className="py-16 bg-black"
-        data-aos="fade-right"
-        data-aos-duration="1200"
-      >
+      <section className="py-16 bg-black">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-extrabold text-center mb-12 tracking-wide text-green-500">
             Get in Touch
           </h2>
           <div className="max-w-2xl mx-auto space-y-8">
             <form
-              action="#"
-              method="POST"
+              onSubmit={handleSubmit}
               className="space-y-6 bg-black p-8 rounded-lg shadow-lg"
             >
               <div className="flex flex-col">
@@ -47,6 +77,8 @@ const ContactUs = () => {
                   id="name"
                   name="name"
                   placeholder="Your full name"
+                  value={formData.name}
+                  onChange={handleChange}
                   required
                   className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
                 />
@@ -60,6 +92,8 @@ const ContactUs = () => {
                   id="email"
                   name="email"
                   placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                   className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
                 />
@@ -73,8 +107,10 @@ const ContactUs = () => {
                   id="phone"
                   name="phone"
                   placeholder="1234567890"
-                  pattern="[0-9]{10}"
+                  value={formData.phone}
+                  onChange={handleChange}
                   required
+                  pattern="[0-9]{10}"
                   className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
                 />
               </div>
@@ -87,6 +123,8 @@ const ContactUs = () => {
                   name="enquiry"
                   placeholder="Write your message here..."
                   rows="5"
+                  value={formData.enquiry}
+                  onChange={handleChange}
                   required
                   className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
                 ></textarea>
@@ -98,28 +136,9 @@ const ContactUs = () => {
                 Enquire
               </button>
             </form>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Details Section */}
-      <section className="py-16" data-aos="fade-left" data-aos-duration="1200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-extrabold text-center mb-12 tracking-wide">
-            Our Location
-          </h2>
-          <div className="max-w-2xl mx-auto space-y-6 text-gray-300">
-            <p className="flex items-center gap-4">
-              <span className="text-green-500">&#x1F3E0;</span> Karnataka Youth
-              Cricket Academy, 123 Main Street, Bangalore, India
-            </p>
-            <p className="flex items-center gap-4">
-              <span className="text-green-500">&#x1F4E7;</span>{" "}
-              info@karnatakacricketacademy.com
-            </p>
-            <p className="flex items-center gap-4">
-              <span className="text-green-500">&#x1F4DE;</span> +91 123 456 7890
-            </p>
+            {responseMessage && (
+              <p className="text-center text-lg mt-4">{responseMessage}</p>
+            )}
           </div>
         </div>
       </section>
