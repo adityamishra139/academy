@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../atoms';
+import axios from 'axios';
 
 const Dialogbox = ({ onClose }) => {
   const [rating, setRating] = useState(0);
@@ -9,10 +10,23 @@ const Dialogbox = ({ onClose }) => {
   const user = useRecoilValue(userState)
   const [formData, setFormData] = user.name === "" ? useState({ name: '', message: '' }): useState({name:user.name , message:''});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log({ ...formData, rating });
-    alert('Feedback submitted! Thank you.');
+    if(user.name !== "")
+    {
+      try{
+        const response = await axios.post('http://localhost:3000/api/user/postFeedback',{email:user.email, name:formData.name , rating:rating , message:formData.message})
+        alert('Feedback submitted! Thank you.');
+      }
+      catch(e)
+      {
+        alert('Failed to submit feedback.')
+        console.error(e);
+      }
+    }
+    else{
+      alert("Please Login to give feedback!")
+    }
     onClose();
   };
 

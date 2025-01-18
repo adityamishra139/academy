@@ -11,6 +11,7 @@ import Gem from "./pages/Gem";
 import AdminPanel from "./pages/AdminPanel";
 import SignIn from "./pages/Signin";
 import SignUp from "./pages/Signup";
+import Testimonial from "./pages/Testimonials";
 
 function App() {
   useEffect(() => {
@@ -34,6 +35,7 @@ function App() {
             <Route path="/adminpanel" element={<AdminPanel/>} />
             <Route path="/signin" element={<SignIn/>} />
             <Route path="/signup" element={<SignUp/>} />
+            <Route path="/testimonial" element={<Testimonial/>} />
           </Routes>
         </main>
         <Footer />
