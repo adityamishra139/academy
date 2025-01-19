@@ -222,4 +222,9 @@ user.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
 	res.status(200).json({"msg":"Admin list sent" , list:response} )
 })
 
+user.get('/links', async (req:Request, res:Response):Promise<void> => {
+	const links = await prisma.link.findMany();
+	res.json(links);
+  });
+
 export default user;

@@ -265,7 +265,7 @@ const handleChange = (e) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try{
-      axios.put(`http://localhost:3000/api/admin/links/1`,{facebook:links.facebook,instagram:links.instagram,whatsapp:links.whatsapp});
+      axios.put(`http://localhost:3000/api/admin/links/0`,{facebook:links.facebook,instagram:links.instagram,whatsapp:links.whatsapp});
       setSuccess("links updated successfully")
     }catch(err){
       setError("failed to update links");

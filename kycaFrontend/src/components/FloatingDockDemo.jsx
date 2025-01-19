@@ -8,8 +8,10 @@ function FloatingDockDemo() {
   useEffect(()=>{  
     const fetchLinks = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/user/links"); 
-      setLinks(response.data[0]);
+      const response = await axios.get("http://localhost:3000/api/user/links");
+      if(response.data[0]!==null){
+        setLinks(response.data[0]);
+      } 
       console.log(links);
     } catch (err) {
       console.error(err);
