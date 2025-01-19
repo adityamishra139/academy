@@ -222,6 +222,43 @@ user.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
 	res.status(200).json({"msg":"Admin list sent" , list:response} )
 })
 
+user.post('/postFeedback' , async(req:Request , res:Response):Promise<void> =>{
+	const {name,email,rating,message} = req.body;
+	try{
+		const feedback =await prisma.feedback.create({
+			data:{
+				name:name,
+				email:email,
+				rating:rating,
+				message:message
+			}
+		})
+		res.status(200).json({"msg":"Success" , feedback:feedback})
+		return 
+	}
+	catch(e)
+	{
+		console.error(e);
+		return 
+	}
+})
+
+user.get('/getFeedback',async(req:Request , res:Response):Promise<void> =>{
+	try{
+		const feedback = await prisma.feedback.findMany({
+			where:{
+				chosen:true
+			}
+		})
+		res.json({msg:"Success" , feedback:feedback})
+	}
+	catch(e)
+	{
+		res.json({msg:"Failed to get Feedback"})
+		console.error(e);
+	}
+})
+
 user.get('/links', async (req:Request, res:Response):Promise<void> => {
 	const links = await prisma.link.findMany();
 	res.json(links);
