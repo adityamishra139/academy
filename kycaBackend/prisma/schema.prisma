@@ -40,10 +40,17 @@ model Coach {
 }
 
 model Feedback {
-  id      Int    @id @default(autoincrement())
+  id      Int     @id @default(autoincrement())
   name    String
   rating  Int
-  email   String 
+  email   String
   message String
-  chosen  Boolean     @default(false)
+  chosen  Boolean @default(false)
+}
+
+model Link {
+  id        Int    @id @default(autoincrement())
+  facebook  String
+  instagram String
+  whatsapp  String
 }
