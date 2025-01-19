@@ -26,6 +26,7 @@
     "react-three-fiber": "^6.0.13",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
+    "safe-buffer": "^5.2.1",
     "tailwind-merge": "^2.6.0",
     "three": "^0.172.0",
     "three-globe": "^2.40.1"

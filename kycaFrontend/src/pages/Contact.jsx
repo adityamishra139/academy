@@ -1,6 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userState } from "../atoms";
+import axios from "axios";
 
 const ContactUs = () => {
+
+  const user = useRecoilValue(userState);
+  const [name,setName] = useState(user.name || "")
+  const [email , setEmail] = useState(user.email || "")
+  const [phone , setPhone] = useState("");
+  const [message , setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
+    setIsSubmitting(true);
+    try{
+      const response = await axios.post('http://localhost:3000/api/inquiries/',{name,email,message,phone})
+      console.log(response.data);
+      if(response.status === 201)
+      {
+        setName(user.name||"")
+        setMessage("")
+        setPhone("")
+        setEmail(user.email||"")
+      }
+      alert("Enquiry Submitted!");
+    }
+    catch(e)
+    {
+      alert('Failed to send enquiry.')
+      console.error(e);
+    }
+    finally{
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <div className="bg-black text-green-500 min-h-screen">
       {/* Contact Us Section */}
@@ -34,6 +71,7 @@ const ContactUs = () => {
           </h2>
           <div className="max-w-2xl mx-auto space-y-8">
             <form
+              onSubmit={(e)=>handleSubmit(e)}
               action="#"
               method="POST"
               className="space-y-6 bg-black p-8 rounded-lg shadow-lg"
@@ -46,6 +84,8 @@ const ContactUs = () => {
                   type="text"
                   id="name"
                   name="name"
+                  value={name}
+                  onChange={(e)=>setName(e.target.value)}
                   placeholder="Your full name"
                   required
                   className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
@@ -59,6 +99,8 @@ const ContactUs = () => {
                   type="email"
                   id="email"
                   name="email"
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
                   className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
@@ -72,6 +114,8 @@ const ContactUs = () => {
                   type="tel"
                   id="phone"
                   name="phone"
+                  value={phone}
+                  onChange={(e)=>{setPhone(e.target.value)}}
                   placeholder="1234567890"
                   pattern="[0-9]{10}"
                   required
@@ -85,6 +129,8 @@ const ContactUs = () => {
                 <textarea
                   id="enquiry"
                   name="enquiry"
+                  value={message}
+                  onChange={(e)=>setMessage(e.target.value)}
                   placeholder="Write your message here..."
                   rows="5"
                   required
@@ -92,11 +138,14 @@ const ContactUs = () => {
                 ></textarea>
               </div>
               <button
-                type="submit"
-                className="bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-600 transition duration-300"
-              >
-                Enquire
-              </button>
+  type="submit"
+  disabled={isSubmitting}
+  className={`bg-green-500 text-white px-6 py-3 rounded-md ${
+    isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"
+  } transition duration-300`}
+>
+  {isSubmitting ? "Submitting..." : "Enquire"}
+</button>
             </form>
           </div>
         </div>
