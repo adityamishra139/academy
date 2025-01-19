@@ -25,13 +25,6 @@ model Inquiry {
   phone     String   @db.VarChar(10)
 }
 
-model Gem {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
-  team String @db.VarChar(255)
-  img  String @db.VarChar(255)
-}
-
 model Coach {
   id    Int     @id @default(autoincrement())
   name  String  @db.VarChar(255)

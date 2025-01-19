@@ -19,7 +19,7 @@ const Gem = () => {
 
     fetchGems();
   }, []);
-
+  
   return (
     <div className="bg-black text-green-500 min-h-screen">
       {/* Gems Section */}
