@@ -54,7 +54,7 @@ async function insertUser(name: string, email: string, password: string): Promis
 	const newUser = await prisma.user.create({
 	  data: {
 		name: name,
-		email: email,
+		email: email.toLowerCase(),
 		password: hashedPassword,
 	  }
 	});
