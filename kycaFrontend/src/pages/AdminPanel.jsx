@@ -69,18 +69,22 @@ const [email, setEmail] = useState("");
     }
     fetchCoaches();
     fetchGems();
-    fetchInquiries();
     fetchAdmins();
     setListChange(false);
   }, [listChange]); // Dependency on listChange to re-fetch
   
-  useEffect(()=>{
-    const interval = setInterval(() => {
-      fetchInquiries();
+  useEffect(() => {
+    const fetchData = () => {
       fetchFeedbacks();
-    },30000)  
-    return()=> clearInterval(interval)
-  })
+      fetchInquiries();
+    };
+    fetchData(); 
+  
+    const interval = setInterval(fetchData, 30000); 
+  
+    return () => clearInterval(interval); 
+  }, []);
+  
   
 useEffect(()=>{  
   const fetchLinks = async () => {
@@ -179,12 +183,6 @@ const fetchFeedbacks = async()=>{
   };
 
 
-
-
-
-
-
-
   //GEM functions
 
   const handleAddGem = async () => {
@@ -234,14 +232,6 @@ const fetchFeedbacks = async()=>{
       setPreview(null);
     }
   };
-
-
-
-
-
-
-
-
 
 //coach functions
 
