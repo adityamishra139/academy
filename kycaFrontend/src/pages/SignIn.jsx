@@ -76,10 +76,10 @@ const SignIn = () => {
     }
   };
 
-  const clearUserSession = () => {
+  const clearUserSession = async () => {
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("jwtExpiry");
-    setUser({
+    await setUser({
       id: null,
       name: "",
       email: "",
