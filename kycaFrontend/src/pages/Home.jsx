@@ -12,7 +12,6 @@ function Home() {
       <Banner />
       <Programs></Programs>
       {/* Social Handles Section */}
-      <Socialhandles />
      
     </div>
   );
