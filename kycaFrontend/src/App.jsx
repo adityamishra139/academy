@@ -13,7 +13,6 @@ import Gem from "./pages/Gem";
 import AdminPanel from "./pages/AdminPanel";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/Signup"; 
-import Testimonial from "./pages/Testimonials";
 import { userState } from "./atoms";
 import { useSetRecoilState } from "recoil";
 
@@ -138,7 +137,6 @@ function App() {
           <Route path="/adminpanel" element={<AdminPanel />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/testimonial" element={<Testimonial />} />
         </Routes>
       </main>
       <Footer />

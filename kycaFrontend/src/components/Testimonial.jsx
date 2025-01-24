@@ -1,97 +1,69 @@
-import React from 'react';
-// import image1 from "../../assets/sports_academy_1.jpg";
-// import image2 from "../../assets/sports_academy_2.jpg";
-// import image3 from "../../assets/sports_academy_3.jpg";
-import Slider from "react-slick";
-
-const Testimonials = [
-    {
-        id: 1,
-        // img: image1,
-        name: "Simran",
-        description: 'High quality coaching and excellent facilities.'
-    },
-    {
-        id: 2,
-        // img: image2,
-        name: "Ananya",
-        description: 'Best training programs and dedicated trainers.'
-    },
-    {
-        id: 3,
-        // img: image3,
-        name: "Sumedha",
-        description: 'Good mentorship and supportive community.'
-    },
-];
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS CSS
+import axios from "axios"; // Assuming you're using Axios to fetch data
 
 const Testimonial = () => {
-    const settings = {
-        dots: false,
-        arrows: false,
-        infinite: true,
-        speed: 800,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        cssEase: "ease-in-out",
-        pauseOnHover: false,
-        pauseOnFocus: true,
-        responsive: [
-            {
-                breakpoint: 10000,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                    infinite: true,
-                },
-            },
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    initialSlide: 2,
-                },
-            },
-            {
-                breakpoint: 640,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                },
-            },
-        ],
+  const [feedbacks, setFeedbacks] = useState([]);
+
+  // Fetch feedback data from backend
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/user/getFeedback");
+        console.log(response.data);
+        setFeedbacks(response.data.feedback);
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      }
     };
 
-    return (
-        <div className='py-10 flex justify-center mt-10 bg-black'>
-            <div className='container'>
-                {/* Header Section */}
-                <div className="text-center mb-10 max-w-[600px] mx-auto">
-                    <p data-aos="fade-up" className='text-green-500 py-1'>What Our Athletes Say</p>
-                    <h1 data-aos="fade-up" className="text-2xl sm:text-3xl font-bold text-green-500">Testimonials</h1>
-                    <p data-aos="fade-up" className='text-sm text-gray-300 mt-2'>                        Hear from our athletes who have trained at our sports academy and experienced top-notch coaching and support. Their feedback speaks for itself!
-                    </p>
-                </div>
-                {/* Testimonial Card Section */}
-                <div data-aos="zoom-in">
-                    <Slider {...settings}>
-                        {Testimonials.map((data) => (
-                            <div key={data.id} className='p-4'>
-                                <div className='flex flex-col gap-4 shadow-lg py-8 px-6 bg-green-800 rounded-xl relative border border-green-600'>
-                                    <div className='text-center'>
-                                        <p className='text-sm text-gray-200 mb-2'>{data.description}</p>
-                                        <h1 className='text-xl font-bold text-green-300'>{data.name}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </Slider>
-                </div>
-            </div>
+    fetchFeedbacks();
+  }, []);
+
+  useEffect(() => {
+    // Initialize AOS
+    AOS.init({
+      duration: 1000,
+      once: true, // Animation occurs once on scroll
+    });
+  }, []);
+
+  return (
+    <section className="bg-white py-12 sm:py-16 lg:py-20" id="testimonials">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">What Our Students Say</h2>
+          <p className="mt-4 text-xl text-gray-500">Hear from some of our successful cricketers</p>
         </div>
-    );
-}
+        {feedbacks.length > 0 ? (
+          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {feedbacks.map((feedback) => (
+              <motion.div
+              key={feedback.id}
+              className="rounded-lg bg-gray-50 p-6 shadow-md hover:shadow-xl transition duration-300"
+              data-aos="fade-up" // AOS scroll animation
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              <p className="text-emerald-600">"{feedback.message}"</p>
+              <div className="mt-4">
+                <p className="font-semibold text-gray-900">- {feedback.name}</p>
+                <p className="text-sm text-gray-500">{feedback.role}</p>
+              </div>
+            </motion.div>
+            
+            
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500">No testimonials available.</p>
+        )}
+      </div>
+    </section>
+  );
+};
 
 export default Testimonial;
