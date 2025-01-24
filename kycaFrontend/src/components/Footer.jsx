@@ -1,50 +1,109 @@
-import React, { useState } from 'react';
-import { MdOutlineSportsCricket } from 'react-icons/md';
-import { Link } from 'react-router-dom';
-import Dialogbox from './Dialogbox'; // Import Dialogbox
+import React, { useState, useEffect } from "react";
+import { MdOutlineSportsCricket } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { Facebook, Instagram } from "lucide-react";
+import Dialogbox from "./Dialogbox"; // Import Dialogbox
+import WhatsAppIcon from "./ui/whatsappicon.jsx";
+import axios from "axios";
 
 const Footer = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [links, setLinks] = useState({});
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/user/links");
+        if (response.data[0]) {
+          setLinks(response.data[0]);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchLinks();
+  }, []);
 
   return (
     <>
-      <footer className="bg-black text-white py-12">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-center md:justify-between space-y-8 md:space-y-0">
-            <div className="flex items-center space-x-2">
-              <MdOutlineSportsCricket className="text-3xl text-green-500" />
-              <span className="text-2xl font-bold text-green-500">KYCA</span>
-            </div>
-            <ul className="flex space-x-8 text-lg">
-              <li>
-                <Link to="/" className="hover:text-green-400">Home</Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-green-400">About</Link>
-              </li>
-              <li>
-                <Link to="/contact" className="hover:text-green-400">Contact</Link>
-              </li>
-            </ul>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-green-500 hover:text-green-600 text-xl">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="text-green-500 hover:text-green-600 text-xl">
-                <i className="fab fa-twitter"></i>
-              </a>
-            </div>
-            <div className="mt-4 md:mt-0">
-              <button
-                onClick={() => setIsDialogOpen(true)}
-                className="bg-green-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-green-600 hover:text-white transition duration-200"
-              >
-                Your Feedback
-              </button>
-            </div>
+      <footer className="bg-white">
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+          {/* Logo Section */}
+          <div className="flex items-center space-x-2 md:order-1">
+            <MdOutlineSportsCricket className="text-3xl text-emerald-600" />
+            <span className="text-2xl font-bold text-emerald-600">KYCA</span>
+          </div>
+
+          {/* Navigation Links */}
+          <ul className="flex space-x-8 text-lg mt-8 md:mt-0 md:order-2">
+            <li>
+              <Link to="/" className="text-gray-500 hover:text-emerald-600">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="text-gray-500 hover:text-emerald-600">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="text-gray-500 hover:text-emerald-600">
+                Contact
+              </Link>
+            </li>
+          </ul>
+
+          {/* Social Media Icons */}
+          <div className="flex space-x-6 mt-8 md:mt-0 md:order-3">
+            <a
+              href={links?.facebook || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-emerald-600"
+            >
+              <span className="sr-only">Facebook</span>
+              <Facebook className="h-6 w-6" aria-hidden="true" />
+            </a>
+            <a
+              href={links?.whatsapp || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-emerald-600"
+            >
+              <span className="sr-only">WhatsApp</span>
+              <WhatsAppIcon className="h-6 w-6" aria-hidden="true" />
+            </a>
+            <a
+              href={links?.instagram || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-emerald-600"
+            >
+              <span className="sr-only">Instagram</span>
+              <Instagram className="h-6 w-6" aria-hidden="true" />
+            </a>
+          </div>
+
+          {/* Feedback Button */}
+          <div className="mt-8 md:mt-0 md:order-4">
+            <button
+              onClick={() => setIsDialogOpen(true)}
+              className="bg-emerald-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-emerald-700 transition duration-200"
+            >
+              Your Feedback
+            </button>
           </div>
         </div>
+
+        {/* Footer Text */}
+        <div className="mt-8 md:mt-0 text-center md:text-left">
+          <p className="text-base text-gray-500">
+            2023 CricketPro Academy. All rights reserved.
+          </p>
+        </div>
       </footer>
+
+      {/* Dialogbox */}
       {isDialogOpen && <Dialogbox onClose={() => setIsDialogOpen(false)} />}
     </>
   );
