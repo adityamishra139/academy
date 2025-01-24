@@ -6,7 +6,7 @@ import Programs from "../components/Programs";
 
 function Home() {
   return (
-    <div className="bg-black">
+    <div className="">
       {/* Hero Section */}
       <Hero></Hero>
       <Banner />

@@ -245,7 +245,7 @@ router.post('/postFeedback' ,authenticate, async(req:Request , res:Response):Pro
 	}
 })
 
-router.get('/getFeedback',authenticate,async(req:Request , res:Response):Promise<void> =>{
+router.get('/getFeedback',async(req:Request , res:Response):Promise<void> =>{
 	try{
 		const feedback = await prisma.feedback.findMany({
 			where:{
