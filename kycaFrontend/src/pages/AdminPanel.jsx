@@ -74,6 +74,7 @@ const [email, setEmail] = useState("");
     fetchCoaches();
     fetchGems();
     fetchInquiries();
+    fetchFeedbacks();
     fetchAdmins();
     setListChange(false);
   }, [listChange]); // Dependency on listChange to re-fetch
@@ -187,12 +188,6 @@ const fetchFeedbacks = async()=>{
   };
 
 
-
-
-
-
-
-
   //GEM functions
 
   const handleAddGem = async () => {
@@ -242,12 +237,6 @@ const fetchFeedbacks = async()=>{
       setGemPreview(null);
     }
   };
-
-
-
-
-
-
 
 
 

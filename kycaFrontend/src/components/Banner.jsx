@@ -1,84 +1,59 @@
-import React from 'react';
-import banner1 from "../assets/banner2.jpg";
-import { FaTrophy } from 'react-icons/fa';
-import { MdSportsCricket } from 'react-icons/md';
-import { GiBat } from 'react-icons/gi';
+import { Target, Users, TrendingUp, Award } from "lucide-react"
 
-const Banner = () => {
+const features = [
+  {
+    name: "Expert Coaching",
+    description: "Learn from experienced coaches who have played at the highest levels of cricket.",
+    icon: Target,
+  },
+  {
+    name: "All Skill Levels",
+    description: "Programs tailored for beginners, intermediate players, and advanced cricketers.",
+    icon: Users,
+  },
+  {
+    name: "Performance Analysis",
+    description: "Utilize cutting-edge technology to analyze and improve your technique.",
+    icon: TrendingUp,
+  },
+  {
+    name: "Competitive Matches",
+    description: "Regular matches and tournaments to apply your skills in real game situations.",
+    icon: Award,
+  },
+]
+
+export default function Banner() {
   return (
-    <div className="relative flex justify-center items-center min-h-[600px] bg-gradient-to-r from-purple-900 via-black to-gray-900 text-white">
-      {/* Background Image with Gradient Overlay */}
-      <div className="absolute inset-0">
-        <img
-          src={banner1}
-          alt="Cricket Academy"
-          className="w-full h-full object-cover opacity-70"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-      </div>
+    <div className="py-12 bg-white" id="features">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:text-center">
+          <h2 className="text-base text-emerald-600 font-semibold tracking-wide uppercase">Features</h2>
+          <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            Why Choose CricketPro Academy
+          </p>
+          <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+            Our academy offers a comprehensive approach to cricket training, focusing on skill development, physical
+            fitness, and mental preparation.
+          </p>
+        </div>
 
-      {/* Content Container */}
-      <div className="relative z-10 container mx-auto px-6 sm:px-12 py-12">
-  <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-12">
-    {/* Text Section */}
-    <div
-      data-aos="fade-right"
-      className="space-y-6 md:order-2" // Move this to the second column on medium screens and above
-    >
-      <h1 className="text-4xl text-center sm:text-5xl font-extrabold text-green-400 leading-tight">
-        Join Our Cricket Academy
-      </h1>
-      <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
-        Step up your cricket game with expert coaching and state-of-the-art
-        facilities. Whether you're a beginner or a professional, our academy
-        is designed to help you reach your full potential.
-      </p>
-      <div className="space-y-4">
-        {[
-          {
-            Icon: MdSportsCricket,
-            text: "Expert Coaching",
-            bgColor: "bg-blue-500",
-          },
-          {
-            Icon: FaTrophy,
-            text: "Championships",
-            bgColor: "bg-yellow-500",
-          },
-          {
-            Icon: GiBat,
-            text: "Top-notch Facilities",
-            bgColor: "bg-red-500",
-          },
-          {
-            Icon: MdSportsCricket,
-            text: "Cricket Tournaments",
-            bgColor: "bg-green-500",
-          },
-        ].map(({ Icon, text, bgColor }, index) => (
-          <div key={index} className="flex items-center gap-4">
-            <div
-              className={`text-white p-3 rounded-full shadow-md ${bgColor}`}
-            >
-              <Icon className="text-2xl" />
-            </div>
-            <p className="text-lg font-medium">{text}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-
-          {/* Image Section */}
-          <div
-            data-aos="fade-left"
-            className="hidden sm:block rounded-lg shadow-lg overflow-hidden"
-          >
-            
-          </div>
+        <div className="mt-10">
+          <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+            {features.map((feature) => (
+              <div key={feature.name} className="relative">
+                <dt>
+                  <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-emerald-500 text-white">
+                    <feature.icon className="h-6 w-6" aria-hidden="true" />
+                  </div>
+                  <p className="ml-16 text-lg leading-6 font-medium text-gray-900">{feature.name}</p>
+                </dt>
+                <dd className="mt-2 ml-16 text-base text-gray-500">{feature.description}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </div>
-  );
-};
-
-export default Banner;
+  )
+}

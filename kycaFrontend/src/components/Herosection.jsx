@@ -1,66 +1,61 @@
-import vid from "../assets/4.mp4"; // Replace with a cricket-themed video
-import { useNavigate } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-const HeroSection = () => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate("/join");
-  };
-
+export default function Hero() {
   return (
-    <section className="relative text-white text-center min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src={vid} type="video/mp4" />
-      </video>
-
-      {/* Content */}
-      <div className="relative z-10 bg-black bg-opacity-0 p-4 md:p-8 rounded-lg w-full max-w-4xl mx-auto flex flex-col items-center">
-        {/* Heading */}
-        <h1
-          data-aos="zoom-out"
-          data-aos-once="true"
-          data-aos-duration="500"
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight"
-        >
-          Welcome to KYCA Cricket Academy
-        </h1>
-
-        {/* Subheading */}
-        <p
-          data-aos="fade-up"
-          data-aos-duration="500"
-          data-aos-delay="100"
-          className="text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-6 px-4 sm:px-8 leading-relaxed"
-        >
-          Train with professionals and elevate your cricket game to the next
-          level.
-        </p>
-
-        {/* Call to Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4 w-full px-6">
-          <button
-            onClick={handleClick}
-            className="bg-green-500 text-white py-3 px-6 w-full sm:w-auto rounded-full transform transition duration-500 hover:bg-green-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+    <div className="relative bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+          <svg
+            className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+            fill="currentColor"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
           >
-            Join Our Academy
-          </button>
-          <button
-            className="bg-transparent border-2 border-white text-white py-3 px-6 w-full sm:w-auto rounded-full transform transition duration-500 hover:bg-white hover:text-black hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
-            onClick={() => navigate("/schedule")}
-          >
-            View Fixtures
-          </button>
+            <polygon points="50,0 100,0 50,100 0,100" />
+          </svg>
+
+          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+            <div className="sm:text-center lg:text-left">
+              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                <span className="block xl:inline">Elevate your game at</span>{" "}
+                <span className="block text-emerald-600 xl:inline">CricketPro Academy</span>
+              </h1>
+              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                Unleash your potential with world-class coaching, cutting-edge facilities, and personalized training
+                programs for all skill levels.
+              </p>
+              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                <div className="rounded-md shadow">
+                  <Link
+                    href="#"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 md:py-4 md:text-lg md:px-10"
+                  >
+                    Start Your Journey
+                  </Link>
+                </div>
+                <div className="mt-3 sm:mt-0 sm:ml-3">
+                  <Link
+                    href="#"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-emerald-700 bg-emerald-100 hover:bg-emerald-200 md:py-4 md:text-lg md:px-10"
+                  >
+                    Explore Programs
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-    </section>
+      <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+        <img
+          className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
+          src="/placeholder.svg?height=600&width=800"
+          alt="Cricket player batting"
+          width={800}
+          height={600}
+        />
+      </div>
+    </div>
   );
-};
-
-export default HeroSection;
+}
