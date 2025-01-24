@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient, User as PrismaUser } from '@prisma/client';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import { error } from 'console';
+import { generateToken } from '../utils/jwt';
+import authenticate from '../middlewares/authenticate';
+import { prisma } from '../pooler';
 
-const user = Router();
-const prisma = new PrismaClient();
+const router = Router();
 dotenv.config();
 
 const userSchema = z.object({
@@ -26,7 +26,7 @@ async function verifyUser(email: string, password: string): Promise<User | null>
   try {
 	const user = await prisma.user.findFirst({
 	  where: {
-		email: email
+		email: email.toLowerCase()
 	  }
 	});
 
@@ -54,7 +54,7 @@ async function insertUser(name: string, email: string, password: string): Promis
 	const newUser = await prisma.user.create({
 	  data: {
 		name: name,
-		email: email,
+		email: email.toLowerCase(),
 		password: hashedPassword,
 	  }
 	});
@@ -66,7 +66,7 @@ async function insertUser(name: string, email: string, password: string): Promis
   }
 }
 
-user.post("/signup", async (req: Request, res: Response):Promise<void> => {
+router.post("/signup", async (req: Request, res: Response):Promise<void> => {
   const { name, email, password } = req.body;
   const inputValidation = userSchema.safeParse({
 	name,
@@ -91,7 +91,8 @@ user.post("/signup", async (req: Request, res: Response):Promise<void> => {
 	const createdUser = await insertUser(name, email, password);
 
 	if (createdUser) {
-		res.json({ msg: "User successfully created", user: createdUser });
+		const token = generateToken({ userId: createdUser.id, email: createdUser.email });
+		res.json({ msg: "User successfully created", user: createdUser ,token});
 	  return 
 	} else {
 		res.status(500).json({ "msg": "Error in user creation" });
@@ -104,7 +105,7 @@ user.post("/signup", async (req: Request, res: Response):Promise<void> => {
   }
 });
 
-user.post('/signin',async(req:Request , res:Response):Promise<void>=>{
+router.post('/signin',async(req:Request , res:Response):Promise<void>=>{
 	const {email,password} = req.body;
 	const inputValidation = userSchema.safeParse({
 		email,
@@ -118,19 +119,20 @@ user.post('/signin',async(req:Request , res:Response):Promise<void>=>{
 	try{
 		const userExists = await verifyUser(email,password);
 		if (userExists) {
-			res.json({ "msg": "Signed in"  , user:userExists});
+			const token = generateToken({ userId: userExists.id, email: userExists.email });
+			res.json({ "msg": "Signed in"  , user:userExists,token});
 		  return 
 		}
 		res.json({"msg":"user does not exist"})
 	}
 	catch(e)
 	{
-		res.json({"msg" : "Error in signing up" , error:e})
+		res.json({"msg" : "Error in signing in" , error:e})
 		return
 	}
 })
 
-user.post('/addAdmin' , async(req:Request , res:Response):Promise<void>=>{
+router.post('/addAdmin' ,authenticate, async(req:Request , res:Response):Promise<void>=>{
 	const {email} = req.body;
 	const inputValidation = z.string().email().safeParse(email)
 	if(!inputValidation.success)
@@ -141,7 +143,7 @@ user.post('/addAdmin' , async(req:Request , res:Response):Promise<void>=>{
 	try{
 	const userResponse =await  prisma.user.findFirst({
 		where:{
-			email:email
+			email:email.toLowerCase()
 		}
 	})
 	if(!userResponse)
@@ -166,7 +168,7 @@ catch (error) {
 })
 
 
-user.post('/delAdmin' , async(req:Request , res:Response):Promise<void>=>{
+router.post('/delAdmin' ,authenticate, async(req:Request , res:Response):Promise<void>=>{
 	const {email} = req.body;
 	console.log(email);
 	const inputValidation = z.string().email().safeParse(email)
@@ -207,7 +209,7 @@ catch (error) {
   }
 })
 
-user.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
+router.get('/getAdmins' ,authenticate, async(req:Request , res:Response):Promise<void>=>{
 	const response =await prisma.user.findMany({
 		where:{
 			isAdmin:true
@@ -222,13 +224,13 @@ user.get('/getAdmins' , async(req:Request , res:Response):Promise<void>=>{
 	res.status(200).json({"msg":"Admin list sent" , list:response} )
 })
 
-user.post('/postFeedback' , async(req:Request , res:Response):Promise<void> =>{
+router.post('/postFeedback' ,authenticate, async(req:Request , res:Response):Promise<void> =>{
 	const {name,email,rating,message} = req.body;
 	try{
 		const feedback =await prisma.feedback.create({
 			data:{
 				name:name,
-				email:email,
+				email:email.toLowerCase(),
 				rating:rating,
 				message:message
 			}
@@ -243,7 +245,7 @@ user.post('/postFeedback' , async(req:Request , res:Response):Promise<void> =>{
 	}
 })
 
-user.get('/getFeedback',async(req:Request , res:Response):Promise<void> =>{
+router.get('/getFeedback',authenticate,async(req:Request , res:Response):Promise<void> =>{
 	try{
 		const feedback = await prisma.feedback.findMany({
 			where:{
@@ -259,9 +261,28 @@ user.get('/getFeedback',async(req:Request , res:Response):Promise<void> =>{
 	}
 })
 
-user.get('/links', async (req:Request, res:Response):Promise<void> => {
+router.post("/aboutUser",authenticate,async(req:Request,res:Response):Promise<void>=>{
+	const {email}=req.body;
+	console.log(email);
+	try{
+		const user=await prisma.user.findFirst({
+			where:{
+				email:email
+			}
+		});
+		 res.json(user);
+		 return;
+	}catch(e){
+		res.json({msg:"Failed to get user details"})
+		console.error(e);
+	}
+});
+
+
+
+router.get('/links', async (req:Request, res:Response):Promise<void> => {
 	const links = await prisma.link.findMany();
 	res.json(links);
   });
 
-export default user;
+export default router;

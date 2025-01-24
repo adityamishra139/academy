@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { userState } from "../atoms";
 
 const AdminPanel = () => {
+  const user=useRecoilValue(userState);
   const [feedbacks , setFeedbacks] = useState([])
   const [links, setLinks] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [listChange, setListChange] = useState(false);
-  const [preview, setPreview] = useState(null);
 
 
 //inquiries states
@@ -28,6 +30,7 @@ const [email, setEmail] = useState("");
   const [gemName, setGemName] = useState("");
   const [gemImage, setGemImage] = useState(null);
   const [gemTeam, setGemTeam] = useState("");
+  const [gemPreview, setGemPreview] = useState(null);
 
 
 
@@ -36,6 +39,7 @@ const [email, setEmail] = useState("");
   const [coachName,setCoachName]=useState("");
   const [coachImage,setCoachImage]=useState(null);
   const [coachPhone,setCoachPhone]=useState(null);
+  const [coachPreview, setCoachPreview] = useState(null);
 
 
   useEffect(() => {
@@ -74,13 +78,17 @@ const [email, setEmail] = useState("");
     setListChange(false);
   }, [listChange]); // Dependency on listChange to re-fetch
   
-  useEffect(()=>{
-    const interval = setInterval(() => {
-      fetchInquiries();
+  useEffect(() => {
+    const fetchData = () => {
       fetchFeedbacks();
-    },30000)  
-    return()=> clearInterval(interval)
-  })
+      fetchInquiries();
+    };
+    fetchData(); 
+
+    const interval = setInterval(fetchData, 30000); 
+
+    return () => clearInterval(interval); 
+  }, []);
   
 useEffect(()=>{  
   const fetchLinks = async () => {
@@ -203,7 +211,7 @@ const fetchFeedbacks = async()=>{
       setGemName("");
       setSuccess("Gem added successfully.");
       setListChange(true);
-      setPreview(null);
+      setGemPreview(null);
 
     } catch {
       setError("Failed to add gem. Please try again.");
@@ -227,11 +235,11 @@ const fetchFeedbacks = async()=>{
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result); 
+        setGemPreview(reader.result); 
       };
       reader.readAsDataURL(file); 
     } else {
-      setPreview(null);
+      setGemPreview(null);
     }
   };
 
@@ -259,7 +267,7 @@ const fetchFeedbacks = async()=>{
       });
       setSuccess("Coach added successfully.");
       setListChange(true);
-      setPreview(null);
+      setCoachPreview(null);
       setCoachName("");
       setCoachPhone("");
     } catch {
@@ -284,11 +292,11 @@ const fetchFeedbacks = async()=>{
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result); 
+        setCoachPreview(reader.result); 
       };
       reader.readAsDataURL(file); 
     } else {
-      setPreview(null);
+      setCoachPreview(null);
     }
   };
 
@@ -454,11 +462,11 @@ const handleChange = (e) => {
         className="p-2 border border-gray-600 rounded text-black"
         onChange={handleFileChangeGem}
       />
-      {preview && (
+      {gemPreview && (
         <div className="mt-4">
           <p>Preview:</p>
           <img
-            src={preview}
+            src={gemPreview}
             alt="Preview"
             className="w-32 h-32 object-cover rounded border"
           />
@@ -591,11 +599,11 @@ const handleChange = (e) => {
         className="p-2 border border-gray-600 rounded text-black"
         onChange={handleFileChangeCoach}
       />
-      {preview && (
+      {coachPreview && (
         <div className="mt-4">
           <p>Preview:</p>
           <img
-            src={preview}
+            src={coachPreview}
             alt="Preview"
             className="w-32 h-32 object-cover rounded border"
           />

@@ -1,9 +1,9 @@
 import { Router, Response, Request } from "express";
-import { PrismaClient } from "@prisma/client";
 import z from "zod";
+import authenticate from '../middlewares/authenticate';
+import { prisma } from '../pooler';
 
-const routerA = Router();
-const prisma = new PrismaClient();
+const router = Router();
 
 // Define Zod schema for URL validation
 const urlSchema = z.object({
@@ -13,9 +13,9 @@ const urlSchema = z.object({
 });
 
 // Define route to update links
-routerA.put(
+router.put(
   "/links/:id",
-  async (req: Request, res: Response): Promise<void> => {
+   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { facebook, instagram, whatsapp } = req.body;
 
@@ -48,7 +48,7 @@ routerA.put(
     }
   }
 );
-routerA.get(
+router.get(
   "/getAllFeedback",
   async (req: Request, res: Response): Promise<void> => {
     try {
@@ -62,8 +62,8 @@ routerA.get(
   }
 );
 
-routerA.post(
-  "/delFeedback",
+router.post(
+  "/delFeedback",authenticate,
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.body;
     try {
@@ -79,8 +79,8 @@ routerA.post(
   }
 );
 
-routerA.post(
-  "/chooseFeedback",
+router.post(
+  "/chooseFeedback",authenticate,
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.body;
     try {
@@ -108,4 +108,5 @@ routerA.post(
   }
 );
 
-export default routerA;
+
+export default router;

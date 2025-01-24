@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express';
 import multer from 'multer';
-import { PrismaClient } from '@prisma/client';
 import path from 'path';
+import authenticate from '../middlewares/authenticate';
+import { prisma } from '../pooler';
 
-const prisma = new PrismaClient();
 const router = Router();
 
 // Set up multer to store files in the 'uploads' directory
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Create a new Gem with image upload
-router.post('/', upload.single('img'), async (req: Request, res: Response) => {
+router.post('/', authenticate,upload.single('img'), async (req: Request, res: Response) => {
   const { name, team } = req.body;
   const img = req.file ? `/uploads/${req.file.filename}` : ''; // Store image path
 
@@ -84,7 +84,7 @@ router.put('/:id', upload.single('img'), async (req: Request, res: Response) => 
 });
 
 // Delete a Gem by ID
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', authenticate,async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await prisma.gem.delete({

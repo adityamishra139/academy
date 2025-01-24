@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { userState } from '../atoms';
+import { jwtDecode } from 'jwt-decode';
 const Navbar = ({}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -21,9 +22,26 @@ const Navbar = ({}) => {
 
   const handleLogout= ()=>{
     resetUser();
-    navigate('/')
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('jwtEx[iry');
+    navigate('/');
   }
-
+const checkTokenOnLoad = () => {
+      const token = localStorage.getItem("jwtToken");
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
+          const currentTime = Date.now() / 1000; // Current time in seconds
+          if (decodedToken.exp < currentTime) {
+            return false;
+          } else {
+            return true;
+          }
+        } catch (error) {
+          console.error("Invalid token.");
+        }
+      }
+    };
   const user = useRecoilValue(userState);
   return (
     <nav className="bg-black text-white shadow-md py-1">
@@ -58,7 +76,7 @@ const Navbar = ({}) => {
               KYCA Gems
             </Link>
           </li>
-          {user.isAdmin ? <><li>
+          {user.isAdmin && checkTokenOnLoad()? <><li>
             <Link to="/adminpanel" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
               Admin Panel
             </Link>
@@ -68,7 +86,7 @@ const Navbar = ({}) => {
         </ul>
 
         {/* Get Started Button (Keep as a regular button if it's an in-page action) */}
-        {user.name === "" ? <><button
+        {user.name === "" && !checkTokenOnLoad() ? <><button
           onClick={handleLogin}
           className="hidden md:block bg-green-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-green-600 hover:text-white hover:scale-95 transition duration-200"
         >

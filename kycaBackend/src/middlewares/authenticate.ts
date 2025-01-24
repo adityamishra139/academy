@@ -1,23 +1,23 @@
-const { verifyToken } = require('./../utils/jwt');
 import { Request, Response, NextFunction } from 'express';
+import { verifyToken } from '../utils/jwt';
+import { AuthenticatedRequest } from '../types/types';
 
-const authenticate = (req: Request, res: Response, next: NextFunction) => {
+const authenticate = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Authorization token required' });
+    res.status(401).json({ message: 'Authorization token required' });
+    return;
   }
 
   const token = authHeader.split(' ')[1];
   try {
     const payload = verifyToken(token);
-    (req as any).user = payload; // Attach user data to the request dynamically
+    req.user = payload; // Attach user data to the request
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
 
-module.exports = {authenticate};
-
-
+export default authenticate;

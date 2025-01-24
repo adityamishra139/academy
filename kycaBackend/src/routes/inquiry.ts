@@ -1,11 +1,11 @@
 import { Request,Response,Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import authenticate from '../middlewares/authenticate';
+import { prisma } from '../pooler';
 
-const prisma = new PrismaClient();
-const router = Router();
+ const router = Router();
 
 // Create a new inquiry
-router.post('/', async (req: Request, res: Response) => {
+router.post('/',authenticate, async (req: Request, res: Response) => {
   const { name, email, message, phone } = req.body;
 
   try {
@@ -32,7 +32,7 @@ router.get('/', async (_req, res) => {
 });
 
 // Delete an inquiry
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',authenticate, async (req, res) => {
   const { id } = req.params;
 
   try {

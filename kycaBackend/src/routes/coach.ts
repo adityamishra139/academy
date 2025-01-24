@@ -1,9 +1,8 @@
 import { Request, Response, Router } from 'express';
 import multer from 'multer';
-import { PrismaClient } from '@prisma/client';
 import path from 'path';
-
-const prisma = new PrismaClient();
+import authenticate from '../middlewares/authenticate';
+import { prisma } from '../pooler';
 const router = Router();
 
 // Set up multer to store files in the 'uploads' directory
@@ -20,7 +19,7 @@ const router = Router();
 
 const upload = multer({ storage });
 
-router.post('/', upload.single('img'), async (req: Request, res: Response) => {
+router.post('/',authenticate, upload.single('img'), async (req: Request, res: Response) => {
   const { name, phone } = req.body;
   const img = req.file ? `/uploads/${req.file.filename}` : '';
 
@@ -39,7 +38,7 @@ router.post('/', upload.single('img'), async (req: Request, res: Response) => {
 router.get('/', async (req: Request, res: Response) => {
   try {
     const coach = await prisma.coach.findMany();
-    res.status(200).json(coach); // Send all coach
+    res.status(200).json(coach);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error fetching coachs' });
@@ -65,7 +64,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 //update existing coach
-router.put('/:id', upload.single('img'), async (req: Request, res: Response) => {
+router.put('/:id',authenticate, upload.single('img'), async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, phone } = req.body;
   const img = req.file ? `/uploads/${req.file.filename}` : undefined; // New image path (if uploaded)
@@ -83,7 +82,7 @@ router.put('/:id', upload.single('img'), async (req: Request, res: Response) => 
 });
 
 // Delete a Coach by ID
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', authenticate,async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     await prisma.coach.delete({
