@@ -76,7 +76,7 @@ const checkTokenOnLoad = () => {
               KYCA Gems
             </Link>
           </li>
-          {user.isAdmin ? <><li>
+          {user.isAdmin && checkTokenOnLoad()? <><li>
             <Link to="/adminpanel" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
               Admin Panel
             </Link>
@@ -86,7 +86,7 @@ const checkTokenOnLoad = () => {
         </ul>
 
         {/* Get Started Button (Keep as a regular button if it's an in-page action) */}
-        {user.name === "" ? <><button
+        {user.name === "" && !checkTokenOnLoad() ? <><button
           onClick={handleLogin}
           className="hidden md:block bg-green-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-green-600 hover:text-white hover:scale-95 transition duration-200"
         >

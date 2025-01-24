@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import {jwtDecode} from "jwt-decode"; // Correct import for jwtDecode
+import {jwtDecode} from "jwt-decode";
 import { userState } from "../atoms";
+import axios from "axios";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -11,21 +11,21 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const setUser = useSetRecoilState(userState);
   const alertShownRef = useRef(false);
-  const fetchDetails=async(email)=>{
-    try{
-      const user=await axios.post("http://localhost:3000/api/user/aboutUser",{email:email});
-      console.log(user);
+
+  const fetchDetails = async (email) => {
+    try {
+      const user = await axios.post("http://localhost:3000/api/user/aboutUser", { email });
       setUser({
         id: user.data.id,
         name: user.data.name,
         email: user.data.email,
         isAdmin: user.data.isAdmin,
       });
-    }
-    catch(e){
+    } catch (e) {
       console.error(e);
     }
-  }
+  };
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
@@ -40,19 +40,15 @@ const SignIn = () => {
         throw new Error("No token received.");
       }
 
-      // Decode the token
       const decodedToken = jwtDecode(token);
-      const expiryTime = decodedToken.exp * 1000; // Convert expiry to milliseconds
+      const expiryTime = decodedToken.exp * 1000;
 
-      // Store token and expiry time in localStorage
       localStorage.setItem("jwtToken", token);
       localStorage.setItem("jwtExpiry", expiryTime);
       fetchDetails(decodedToken.email);
-
-      // Schedule token expiry
       scheduleTokenExpiry(expiryTime);
 
-      navigate("/");
+      navigate("/"); // Redirect after successful sign-in
     } catch (error) {
       console.error("Sign-in failed:", error);
       alert("Failed to login, please check your credentials.");
@@ -74,7 +70,7 @@ const SignIn = () => {
     } else {
       clearUserSession();
       if (!alertShownRef.current) {
-        alert("Session expired. i am here Please sign in again.");
+        alert("Session expired. Please sign in again.");
         alertShownRef.current = true;
       }
     }

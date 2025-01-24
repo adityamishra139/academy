@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode"; // Ensure you install this library
+import {jwtDecode} from "jwt-decode"; // Correct import for jwt-decode
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -12,14 +12,14 @@ import Contact from "./pages/Contact";
 import Gem from "./pages/Gem";
 import AdminPanel from "./pages/AdminPanel";
 import SignIn from "./pages/SignIn";
-import SignUp from "./pages/Signup";
+import SignUp from "./pages/Signup"; 
 import Testimonial from "./pages/Testimonials";
 import { userState } from "./atoms";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 function App() {
-  const resetUser = useResetRecoilState(userState);
-  const setUser=useSetRecoilState(userState);
+  const resetUser = useSetRecoilState(userState);
+  const setUser = useSetRecoilState(userState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,9 +34,9 @@ function App() {
     // Axios Interceptors for Authorization
     axios.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem("jwtToken"); // Fetch JWT token from localStorage
+        const token = localStorage.getItem("jwtToken");
         if (token) {
-          config.headers.Authorization = `Bearer ${token}`; // Attach token to Authorization header
+          config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
@@ -54,34 +54,31 @@ function App() {
       }
     );
 
-    const fetchDetails=async(email)=>{
-      try{
-        const user=await axios.post("http://localhost:3000/api/user/aboutUser",{email});
+    const fetchDetails = async (email) => {
+      try {
+        const user = await axios.post("http://localhost:3000/api/user/aboutUser", { email });
         setUser({
           id: user.data.id,
           name: user.data.name,
           email: user.data.email,
           isAdmin: user.data.isAdmin,
         });
-      }
-      catch(e){
+      } catch (e) {
         console.error(e);
       }
-    }
+    };
 
-    // Check token validity on app load
     const checkTokenOnLoad = () => {
       const token = localStorage.getItem("jwtToken");
       if (token) {
         try {
           const decodedToken = jwtDecode(token);
-          const currentTime = Date.now() / 1000; // Current time in seconds
+          const currentTime = Date.now() / 1000;
           console.log(decodedToken);
           if (decodedToken.exp < currentTime) {
-            console.log("Token expired. Logging out.");
+            alert("Token expired. Logging out.");
             clearUserSession();
           } else {
-            // Token is valid, set up the user state and token expiry
             fetchDetails(decodedToken.email);
             scheduleTokenExpiry(decodedToken.exp * 1000);
           }
@@ -104,10 +101,10 @@ function App() {
       }
     };
 
-    const clearUserSession = () => {
+    const clearUserSession = async () => {
       localStorage.removeItem("jwtToken");
       localStorage.removeItem("jwtExpiry");
-      resetUser({
+      await resetUser({
         id: null,
         name: "",
         email: "",
@@ -118,10 +115,9 @@ function App() {
 
     checkTokenOnLoad();
 
-    // Listen for storage changes (for cross-tab synchronization)
     window.addEventListener("storage", (event) => {
       if (event.key === "jwtToken" && !event.newValue) {
-        clearUserSession(); // Log out if token is cleared in another tab
+        clearUserSession();
       }
     });
 
