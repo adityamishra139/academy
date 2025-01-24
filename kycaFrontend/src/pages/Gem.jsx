@@ -21,7 +21,7 @@ const Gem = () => {
   }, []);
   
   return (
-    <div className="bg-black text-green-500 min-h-screen">
+    <div className="bg-gray-200 font-extrabold text-green-500 min-h-screen">
       {/* Gems Section */}
       <section className="py-16" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">
         <div className="container mx-auto text-center px-4">

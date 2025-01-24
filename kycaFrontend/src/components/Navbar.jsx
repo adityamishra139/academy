@@ -26,7 +26,7 @@ const Navbar = ({}) => {
 
   const user = useRecoilValue(userState);
   return (
-    <nav className="bg-black text-white shadow-md py-1">
+    <nav className="bg-white text-black shadow-lg border rounded-2xl py-1">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center space-x-2">

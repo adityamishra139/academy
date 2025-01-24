@@ -20,8 +20,8 @@ export function AnimatedTooltipPreview() {
     fetchCoaches();
   }, []);
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-black shadow-md rounded-lg border border-black w-full">
-      <h2 className="text-4xl font-bold text-green-500 mb-16  " data-aos="fade-up"
+    <div className="flex flex-col bg-gray-200 items-center justify-center p-6 bg-  shadow-md ">
+      <h2 className="text-4xl font-bold text-green-600 mb-16  " data-aos="fade-up"
           data-aos-duration="500"
           data-aos-delay="100">Our Coaches</h2>
       <div className="flex flex-row items-center justify-center mb-10 w-full">

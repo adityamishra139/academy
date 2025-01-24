@@ -1,4 +1,4 @@
-import vid from "../assets/4.mp4"; // Replace with a cricket-themed video
+import vid from "../assets/6.mp4"; // Replace with a cricket-themed video
 import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
@@ -51,12 +51,12 @@ const HeroSection = () => {
           >
             Join Our Academy
           </button>
-          <button
+          {/* <button
             className="bg-transparent border-2 border-white text-white py-3 px-6 w-full sm:w-auto rounded-full transform transition duration-500 hover:bg-white hover:text-black hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
             onClick={() => navigate("/schedule")}
           >
             View Fixtures
-          </button>
+          </button> */}
         </div>
       </div>
     </section>

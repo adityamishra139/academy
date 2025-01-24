@@ -6,7 +6,7 @@ import { AnimatedTooltipPreview } from "../components/AnimatedTooltipPreview";
 
 function Home() {
   return (
-    <div className="bg-black">
+    <div className="bg-gray-200">
       {/* Hero Section */}
       <HeroSection />
       <Banner />
