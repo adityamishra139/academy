@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { userState } from '../atoms';
+import { jwtDecode } from 'jwt-decode';
 const Navbar = ({}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -21,9 +22,26 @@ const Navbar = ({}) => {
 
   const handleLogout= ()=>{
     resetUser();
-    navigate('/')
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('jwtEx[iry');
+    navigate('/');
   }
-
+const checkTokenOnLoad = () => {
+      const token = localStorage.getItem("jwtToken");
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
+          const currentTime = Date.now() / 1000; // Current time in seconds
+          if (decodedToken.exp < currentTime) {
+            return false;
+          } else {
+            return true;
+          }
+        } catch (error) {
+          console.error("Invalid token.");
+        }
+      }
+    };
   const user = useRecoilValue(userState);
   return (
     <nav className="bg-black text-white shadow-md py-1">

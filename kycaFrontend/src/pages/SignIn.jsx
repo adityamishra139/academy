@@ -1,36 +1,113 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
+import {jwtDecode} from "jwt-decode"; // Correct import for jwtDecode
 import { userState } from "../atoms";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password , setPassword] = useState("")
+  const [password, setPassword] = useState("");
   const setUser = useSetRecoilState(userState);
-  const handleSignIn = async(e) => {
-    e.preventDefault();
+  const alertShownRef = useRef(false);
+  const fetchDetails=async(email)=>{
     try{
-        const res = await axios.post('http://localhost:3000/api/user/signin',{email:email,password:password})
-        const obj = res.data.user
-        console.log(obj);
-        console.log(obj.id,obj.name)
-        //add different user fields here in recoil
-        setUser({
-            id:obj.id,
-            name:obj.name,
-            email:obj.email,
-            isAdmin:obj.isAdmin
-        })
-        navigate('/')
+      const user=await axios.post("http://localhost:3000/api/user/aboutUser",{email:email});
+      console.log(user);
+      setUser({
+        id: user.data.id,
+        name: user.data.name,
+        email: user.data.email,
+        isAdmin: user.data.isAdmin,
+      });
     }
-    catch(e)
-    {
-        console.error(e)
-        alert('Failed to login , please check your credentials')
+    catch(e){
+      console.error(e);
+    }
+  }
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3000/api/user/signin", {
+        email: email,
+        password: password,
+      });
+
+      const token = res.data.token;
+
+      if (!token) {
+        throw new Error("No token received.");
+      }
+
+      // Decode the token
+      const decodedToken = jwtDecode(token);
+      const expiryTime = decodedToken.exp * 1000; // Convert expiry to milliseconds
+
+      // Store token and expiry time in localStorage
+      localStorage.setItem("jwtToken", token);
+      localStorage.setItem("jwtExpiry", expiryTime);
+      fetchDetails(decodedToken.email);
+
+      // Schedule token expiry
+      scheduleTokenExpiry(expiryTime);
+
+      navigate("/");
+    } catch (error) {
+      console.error("Sign-in failed:", error);
+      alert("Failed to login, please check your credentials.");
     }
   };
+
+  const scheduleTokenExpiry = (expiryTime) => {
+    const currentTime = Date.now();
+    const timeUntilExpiry = expiryTime - currentTime;
+
+    if (timeUntilExpiry > 0) {
+      setTimeout(() => {
+        clearUserSession();
+        if (!alertShownRef.current) {
+          alert("Session expired. Please sign in again.");
+          alertShownRef.current = true;
+        }
+      }, timeUntilExpiry);
+    } else {
+      clearUserSession();
+      if (!alertShownRef.current) {
+        alert("Session expired. i am here Please sign in again.");
+        alertShownRef.current = true;
+      }
+    }
+  };
+
+  const clearUserSession = () => {
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("jwtExpiry");
+    setUser({
+      id: null,
+      name: "",
+      email: "",
+      isAdmin: false,
+    });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    const expiryTime = localStorage.getItem("jwtExpiry");
+
+    if (token && expiryTime) {
+      const currentTime = Date.now();
+      if (currentTime > expiryTime) {
+        clearUserSession();
+        if (!alertShownRef.current) {
+          alert("Session expired. Please sign in again.");
+          alertShownRef.current = true;
+        }
+      } else {
+        scheduleTokenExpiry(Number(expiryTime));
+      }
+    }
+  }, [setUser]);
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100">
@@ -40,14 +117,14 @@ const SignIn = () => {
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e)=>{setEmail(e.target.value)}}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e)=>{setPassword(e.target.value)}}
+          onChange={(e) => setPassword(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
         />
         <button

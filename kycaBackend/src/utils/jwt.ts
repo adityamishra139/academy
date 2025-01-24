@@ -1,20 +1,12 @@
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
+import jwt from 'jsonwebtoken';
 
-dotenv.config(); // Load environment variables from .env file
-
-const generateToken = (payload:any) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || "1h",
-  });
+const SECRET_KEY = 'ahsGFDGHIFHGVBHVXCIUYtEGOWDDCYgoehwfgdoQ8I37640E98  27YFIUAHSPOzviJUGOZw&g6FYHVUSVGCJZHVI3UW74  0R8UFYOJCVGBJVHsbvLFHLBAJHFGBPVKU'; 
+// Generate a token
+export const generateToken = (payload: object, expiresIn: string = '15s'): string => {
+  return jwt.sign(payload, SECRET_KEY, { expiresIn });
 };
 
-const verifyToken = (token:any) => {
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
-    throw new Error("Invalid or expired token");
-  }
+// Verify a token
+export const verifyToken = (token: string): any => {
+  return jwt.verify(token, SECRET_KEY);
 };
-
-module.exports = { generateToken, verifyToken };

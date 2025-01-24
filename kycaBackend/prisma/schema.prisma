@@ -47,3 +47,10 @@ model Link {
   instagram String
   whatsapp  String
 }
+
+model Gem {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+  team String @db.VarChar(255)
+  img  String @db.VarChar(255)
+}
