@@ -5,139 +5,172 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { userState } from '../atoms';
-import { jwtDecode } from 'jwt-decode';
-const Navbar = ({}) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+import {jwtDecode} from 'jwt-decode';
 
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const resetUser =useResetRecoilState(userState)
+  const resetUser = useResetRecoilState(userState);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleLogin = ()=>{
-    navigate('/signin')
-  }
+  const handleLogin = () => {
+    navigate('/signin');
+  };
 
-  const handleLogout= ()=>{
+  const handleLogout = () => {
     resetUser();
     localStorage.removeItem('jwtToken');
-    localStorage.removeItem('jwtEx[iry');
+    localStorage.removeItem('jwtExpiry');
     navigate('/');
-  }
-const checkTokenOnLoad = () => {
-      const token = localStorage.getItem("jwtToken");
-      if (token) {
-        try {
-          const decodedToken = jwtDecode(token);
-          const currentTime = Date.now() / 1000; // Current time in seconds
-          if (decodedToken.exp < currentTime) {
-            return false;
-          } else {
-            return true;
-          }
-        } catch (error) {
-          console.error("Invalid token.");
-        }
-      }
-    };
-  const user = useRecoilValue(userState);
-  return (
-    <nav className="bg-black text-white shadow-md py-1">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <MdOutlineSportsCricket className="text-2xl text-green-500" />
-          <Link to="/" className="text-xl font-bold text-green-500 no-underline">
-            KYCA
-          </Link>
-        </div>
+  };
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-6 text-sm font-medium">
-          <li>
-            <Link to="/" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
+  const checkTokenOnLoad = () => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000; 
+        return decodedToken.exp > currentTime;
+      } catch (error) {
+        console.error("Invalid token.");
+        return false;
+      }
+    }
+    return false;
+  };
+
+  const user = useRecoilValue(userState);
+
+  return (
+    <header className="bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
+          {/* Logo */}
+          <div className="flex items-center">
+            <MdOutlineSportsCricket className="text-emerald-500 text-3xl" />
+            <Link to="/" className="ml-2 text-xl font-bold text-gray-900">
+              KYCA
+            </Link>
+          </div>
+
+          {/* Desktop Menu */}
+          <nav className="hidden md:flex space-x-10">
+            <Link to="/" className="text-base font-medium text-gray-500 hover:text-gray-900">
               Home
             </Link>
-          </li>
-          <li>
-            <Link to="/about" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
+            <Link to="/about" className="text-base font-medium text-gray-500 hover:text-gray-900">
               About Us
             </Link>
-          </li>
-          <li>
-            <Link to="/testimonial" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
+            <Link to="/testimonial" className="text-base font-medium text-gray-500 hover:text-gray-900">
               Testimonials
             </Link>
-          </li>
-          <li>
-            <Link to="/gem" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
+            <Link to="/gem" className="text-base font-medium text-gray-500 hover:text-gray-900">
               KYCA Gems
             </Link>
-          </li>
-          {user.isAdmin && checkTokenOnLoad()? <><li>
-            <Link to="/adminpanel" className="text-1xl hover:text-green-500 hover:scale-110 transition duration-200 cursor-pointer no-underline">
-              Admin Panel
-            </Link>
-          </li></>:""}
-          
-          {/* Add other links similarly */}
-        </ul>
+            {user.isAdmin && checkTokenOnLoad() && (
+              <Link to="/adminpanel" className="text-base font-medium text-gray-500 hover:text-gray-900">
+                Admin Panel
+              </Link>
+            )}
+          </nav>
 
-        {/* Get Started Button (Keep as a regular button if it's an in-page action) */}
-        {user.name === "" && !checkTokenOnLoad() ? <><button
-          onClick={handleLogin}
-          className="hidden md:block bg-green-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-green-600 hover:text-white hover:scale-95 transition duration-200"
-        >
-          Login
-        </button></>:<><button
-          onClick={handleLogout}
-          className="hidden md:block bg-red-500 text-black px-4 py-2 rounded-md font-semibold hover:bg-red-600 hover:text-white hover:scale-95 transition duration-200"
-        >
-          Logout
-        </button></>}
-        
+          {/* Action Button */}
+          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+            {user.name === "" && !checkTokenOnLoad() ? (
+              <button
+                onClick={handleLogin}
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700"
+              >
+                Login
+              </button>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700"
+              >
+                Logout
+              </button>
+            )}
+          </div>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden text-white text-2xl focus:outline-none"
-          onClick={toggleMenu}
-        >
-          {isMenuOpen ? <FiX /> : <FiMenu />}
-        </button>
+          {/* Mobile Menu Toggle */}
+          <div className="-mr-2 -my-2 md:hidden">
+            <button
+              type="button"
+              className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
+              onClick={toggleMenu}
+            >
+              <span className="sr-only">Open menu</span>
+              {isMenuOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-black text-white px-4 py-4">
-          <ul className="flex flex-col space-y-4 text-sm font-medium">
-            <li>
-              <Link to="/" className="hover:text-green-500 transition duration-200 cursor-pointer no-underline">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className="hover:text-green-500 transition duration-200 cursor-pointer no-underline">
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link to="/testimonials" className="hover:text-green-500 transition duration-200 cursor-pointer no-underline">
-                Testimonials
-              </Link>
-            </li>
-            {/* Add other links similarly */}
-          </ul>
-          <button
-            onClick={handleLogin}
-            className="mt-4 bg-green-500 text-black w-full py-2 rounded-md font-semibold hover:bg-green-600 hover:text-white transition duration-200"
-          >
-            Login
-          </button>
+        <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
+          <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
+            <div className="pt-5 pb-6 px-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <MdOutlineSportsCricket className="text-emerald-500 text-3xl" />
+                  <Link to="/" className="ml-2 text-xl font-bold text-gray-900">
+                    KYCA
+                  </Link>
+                </div>
+                <div className="-mr-2">
+                  <button
+                    type="button"
+                    className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
+                    onClick={toggleMenu}
+                  >
+                    <span className="sr-only">Close menu</span>
+                    <FiX className="h-6 w-6" />
+                  </button>
+                </div>
+              </div>
+              <div className="mt-6">
+                <nav className="grid gap-y-8">
+                  <Link to="/" className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                    <span className="text-base font-medium text-gray-900">Home</span>
+                  </Link>
+                  <Link to="/about" className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                    <span className="text-base font-medium text-gray-900">About Us</span>
+                  </Link>
+                  <Link to="/testimonial" className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                    <span className="text-base font-medium text-gray-900">Testimonials</span>
+                  </Link>
+                  <Link to="/gem" className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                    <span className="text-base font-medium text-gray-900">KYCA Gems</span>
+                  </Link>
+                </nav>
+              </div>
+            </div>
+            <div className="py-6 px-5 space-y-6">
+              {user.name === "" && !checkTokenOnLoad() ? (
+                <button
+                  onClick={handleLogin}
+                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700"
+                >
+                  Login
+                </button>
+              ) : (
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700"
+                >
+                  Logout
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
 
