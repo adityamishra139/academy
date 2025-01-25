@@ -1,8 +1,7 @@
 import Banner from "../components/Banner";
-import Socialhandles from "../components/Socialhandles";
-import { AnimatedTooltipPreview } from "../components/AnimatedTooltipPreview";
 import Hero from "../components/Herosection";
 import Programs from "../components/Programs";
+import Testimonial from "../components/Testimonial";
 
 function Home() {
   return (
@@ -11,6 +10,7 @@ function Home() {
       <Hero></Hero>
       <Banner />
       <Programs></Programs>
+      <Testimonial></Testimonial>
       {/* Social Handles Section */}
      
     </div>

@@ -46,12 +46,19 @@ const [email, setEmail] = useState("");
     
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/user/getAdmins");
+        const token = localStorage.getItem("jwtToken"); // Retrieve the token from local storage
+        const response = await axios.get("http://localhost:3000/api/user/getAdmins", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the JWT in the Authorization header
+          },
+        });
         setAdmins(response.data.list || []); // Ensure admins is always set to an array
       } catch (err) {
         setError("Failed to fetch admins. Please try again later.");
+        console.error("Error fetching admins:", err); // Log the error for debugging
       }
     };
+    
 
 
 
@@ -312,7 +319,7 @@ const handleChange = (e) => {
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="bg-black min-h-screen p-8 font-sans text-white">
+    <div className="bg-white min-h-screen p-8 font-sans text-black">
       <h1 className="text-3xl font-bold mb-2">Admin Panel</h1>
       <hr className="border-gray-800" />
       <br />
@@ -354,16 +361,16 @@ const handleChange = (e) => {
         {admins.length > 0 ? (
           <table className="w-full table-auto border-collapse">
             <thead>
-              <tr className="bg-gray-800">
-                <th className="border border-gray-600 p-2">ID</th>
-                <th className="border border-gray-600 p-2">Name</th>
-                <th className="border border-gray-600 p-2">Email</th>
-                <th className="border border-gray-600 p-2">Actions</th>
+              <tr className="bg-emerald-700">
+                <th className="text-white border border-gray-600 p-2">ID</th>
+                <th className="text-white  border border-gray-600 p-2">Name</th>
+                <th className="text-white  border border-gray-600 p-2">Email</th>
+                <th className="text-white  border border-gray-600 p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {admins.map((admin) => (
-                <tr key={admin.id} className="hover:bg-gray-700">
+                <tr key={admin.id} className="hover:bg-emerald-500">
                   <td className="border border-gray-600 text-center p-2">{admin.id}</td>
                   <td className="border border-gray-600 text-center p-2">{admin.name}</td>
                   <td className="border border-gray-600 text-center p-2">{admin.email}</td>
@@ -391,29 +398,29 @@ const handleChange = (e) => {
       {inquiries.length > 0 ? (
         <table className="w-full table-auto border-collapse">
           <thead>
-            <tr className="bg-gray-800">
-              <th className="border border-gray-600 p-2">ID</th>
-              <th className="border border-gray-600 p-2">Name</th>
-              <th className="border border-gray-600 p-2">Email</th>
-              <th className="border border-gray-600 p-2">Message</th>
-              <th className="border border-gray-600 p-2">Created At</th>
-              <th className="border border-gray-600 p-2">Actions</th>
+            <tr className="bg-emerald-700">
+              <th className="text-white border border-gray-600 p-2">ID</th>
+              <th className="text-white border border-gray-600 p-2">Name</th>
+              <th className="text-white border border-gray-600 p-2">Email</th>
+              <th className="text-white border border-gray-600 p-2">Message</th>
+              <th className="text-white border border-gray-600 p-2">Created At</th>
+              <th className="text-white border border-gray-600 p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {inquiries.map((inquiry) => (
-              <tr key={inquiry.id} className="hover:bg-gray-700">
-                <td className="border border-gray-600 p-2">{inquiry.id}</td>
-                <td className="border border-gray-600 p-2">{inquiry.name}</td>
-                <td className="border border-gray-600 p-2">{inquiry.email}</td>
-                <td className="border border-gray-600 p-2">{inquiry.message}</td>
-                <td className="border border-gray-600 p-2">
+              <tr key={inquiry.id} className="hover:bg-emerald-500">
+                <td className="border border-gray-600 text-center p-2">{inquiry.id}</td>
+                <td className="border border-gray-600 text-center p-2">{inquiry.name}</td>
+                <td className="border border-gray-600 text-center p-2">{inquiry.email}</td>
+                <td className="border border-gray-600 text-center p-2">{inquiry.message}</td>
+                <td className="border border-gray-600 text-center p-2">
                   {new Date(inquiry.createdAt).toLocaleString()}
                 </td>
-                <td className="border border-gray-600 p-2">
+                <td className="border border-gray-600 p-2 text-center">
                   <button
                     onClick={() => handleDeleteInquiries(inquiry.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded "
                   >
                     Delete
                   </button>
@@ -475,16 +482,16 @@ const handleChange = (e) => {
         {gems.length > 0 ? (
           <table className="w-full table-auto border-collapse">
             <thead>
-              <tr className="bg-gray-800">
-                <th className="border border-gray-600 p-2">ID</th>
-                <th className="border border-gray-600 p-2">Name</th>
-                <th className="border border-gray-600 p-2">Image</th>
-                <th className="border border-gray-600 p-2">Actions</th>
+              <tr className="bg-emerald-700">
+                <th className="text-white border border-gray-600 p-2">ID</th>
+                <th className="text-white border border-gray-600 p-2">Name</th>
+                <th className="text-white border border-gray-600 p-2">Image</th>
+                <th className="text-white border border-gray-600 p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {gems.map((gem) => (
-                <tr key={gem.id} className="hover:bg-gray-700">
+                <tr key={gem.id} className="hover:bg-emerald-500">
                   <td className="border border-gray-600 text-center p-2">{gem.id}</td>
                   <td className="border border-gray-600 text-center p-2">{gem.name}</td>
                   <td className="border border-gray-600 text-center p-2">
@@ -493,7 +500,7 @@ const handleChange = (e) => {
                   <td className="border border-gray-600 text-center p-2">
                     <button
                       onClick={() => handleDeleteGem(gem.id)}
-                      className="bg-red-500 hover:bg-red-900 text-white px-4 py-2 rounded"
+                      className="bg-red-500 hover:bg-red-900 text-white px-4 py-2 rounded bg-center"
                     >
                       Delete
                     </button>
@@ -513,18 +520,18 @@ const handleChange = (e) => {
   {feedbacks.length > 0 ? (
     <table className="w-full table-auto border-collapse">
       <thead>
-        <tr className="bg-gray-800">
-          <th className="border border-gray-600 p-2">ID</th>
-          <th className="border border-gray-600 p-2">Name</th>
-          <th className="border border-gray-600 p-2">Email</th>
-          <th className="border border-gray-600 p-2">Rating</th>
-          <th className="border border-gray-600 p-2">Message</th>
-          <th className="border border-gray-600 p-2">Actions</th>
+        <tr className="bg-emerald-700">
+          <th className="text-white border border-gray-600 p-2">ID</th>
+          <th className="text-white border border-gray-600 p-2">Name</th>
+          <th className="text-white border border-gray-600 p-2">Email</th>
+          <th className="text-white border border-gray-600 p-2">Rating</th>
+          <th className="text-white border border-gray-600 p-2">Message</th>
+          <th className="text-white border border-gray-600 p-2">Actions</th>
         </tr>
       </thead>
       <tbody>
         {feedbacks.map((feedback) => (
-          <tr key={feedback.id} className="hover:bg-gray-700">
+          <tr key={feedback.id} className="hover:bg-emerald-500">
             <td className="border border-gray-600 text-center p-2">{feedback.id}</td>
             <td className="border border-gray-600 text-center p-2">{feedback.name}</td>
             <td className="border border-gray-600 text-center p-2">{feedback.email}</td>
@@ -615,17 +622,17 @@ const handleChange = (e) => {
         {coaches.length > 0 ? (
           <table className="w-full table-auto border-collapse">
             <thead>
-              <tr className="bg-gray-800">
-                <th className="border border-gray-600 p-2">ID</th>
-                <th className="border border-gray-600 p-2">Name</th>
-                <th className="border border-gray-600 p-2">Phone</th>
-                <th className="border border-gray-600 p-2">Image</th>
-                <th className="border border-gray-600 p-2">Actions</th>
+              <tr className="bg-emerald-700">
+                <th className="text-white border border-gray-600 p-2">ID</th>
+                <th className="text-white border border-gray-600 p-2">Name</th>
+                <th className="text-white border border-gray-600 p-2">Phone</th>
+                <th className="text-white border border-gray-600 p-2">Image</th>
+                <th className="text-white border border-gray-600 p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {coaches.map((coach) => (
-                <tr key={coach.id} className="hover:bg-gray-700">
+                <tr key={coach.id} className="hover:bg-emerald-500">
                   <td className="border border-gray-600 text-center p-2">{coach.id}</td>
                   <td className="border border-gray-600 text-center p-2">{coach.name}</td>
                   <td className="border border-gray-600 text-center p-2">{coach.phone}</td>
@@ -651,58 +658,58 @@ const handleChange = (e) => {
 
 
       <div className="admin-edit-links">
-      <h2>Edit Social Links</h2>
-      <form className="edit-links-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="facebook">Facebook:</label>
-          <input
-                    className="text-black"
-
-            type="url"
-            id="facebook"
-            name="facebook"
-            value={links.facebook}
-            onChange={handleChange}
-            placeholder="Enter Facebook URL"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="instagram">Instagram:</label>
-          <input
-                    className="text-black"
-
-            type="url"
-            id="instagram"
-            name="instagram"
-            value={links.instagram}
-            onChange={handleChange}
-            placeholder="Enter Instagram URL"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="whatsapp">WhatsApp:</label>
-          <input
-          className="text-black"
-            type="url"
-            id="whatsapp"
-            name="whatsapp"
-            value={links.whatsapp}
-            onChange={handleChange}
-            placeholder="Enter WhatsApp URL"
-            required
-          />
-        </div>
-        <div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Submit
-          </button></div>
-      </form>
+  <h2 className="text-xl font-bold mb-4">Edit Social Links</h2>
+  <form className="edit-links-form" onSubmit={handleSubmit}>
+    <div className="form-group">
+      <label htmlFor="facebook" className="text-black">{'Facebook:\t'} </label>
+      <input
+        className="bg-gray-800 text-white border border-gray-600 p-2 rounded-lg"
+        type="url"
+        id="facebook"
+        name="facebook"
+        value={links.facebook}
+        onChange={handleChange}
+        placeholder="Enter Facebook URL"
+        required
+      />
     </div>
+    <div className="form-group">
+      <label htmlFor="instagram" className="text-black">{'Instagram:\t'}</label>
+      <input
+        className="bg-gray-800 text-white border border-gray-600 p-2 rounded-lg"
+        type="url"
+        id="instagram"
+        name="instagram"
+        value={links.instagram}
+        onChange={handleChange}
+        placeholder="Enter Instagram URL"
+        required
+      />
+    </div>
+    <div className="form-group">
+      <label htmlFor="whatsapp" className="text-black">{'WhatsApp:\t'}</label>
+      <input
+        className="bg-gray-800 text-white border border-gray-600 p-2 rounded-lg"
+        type="url"
+        id="whatsapp"
+        name="whatsapp"
+        value={links.whatsapp}
+        onChange={handleChange}
+        placeholder="Enter WhatsApp URL"
+        required
+      />
+    </div>
+    <div>
+      <button
+        type="submit"
+        className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+
 
     </div>
   );
