@@ -655,8 +655,6 @@ const handleChange = (e) => {
           <p className="text-center">No coaches found.</p>
         )}
       </div>
-
-
       <div className="admin-edit-links">
   <h2 className="text-xl font-bold mb-4">Edit Social Links</h2>
   <form className="edit-links-form" onSubmit={handleSubmit}>
