@@ -215,6 +215,7 @@ const fetchFeedbacks = async()=>{
       setSuccess("Gem added successfully.");
       setListChange(true);
       setGemPreview(null);
+      setGemImage(null);
 
     } catch {
       setError("Failed to add gem. Please try again.");
@@ -269,6 +270,7 @@ const fetchFeedbacks = async()=>{
       setCoachName("");
       setCoachPhone("");
       setCoachDescription("");
+      setCoachImage(null);
     } catch {
       setError("Failed to add Coach. Please try again.");
     }
