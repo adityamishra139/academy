@@ -1,38 +1,61 @@
-import { Link } from "react-router-dom";
-import heroImage from "./../assets/HERO.jpg"; // Replace with your image path
-
-export default function HeroSection() {
+import {Link} from "react-router-dom";
+import HERO from "./../assets/HERO.jpg"
+export default function Hero() {
   return (
-    <div
-      className="relative w-full h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${heroImage})` }}
-    >
-      <div className="absolute inset-0 bg-black bg-opacity-40"></div> {/* Dark overlay for better text contrast */}
-      <div className="relative z-10 flex items-center h-full px-8">
-        <div className="bg-black bg-opacity-60 text-white rounded-xl p-8 max-w-lg">
-          <h1 className="text-4xl font-bold mb-4">
-            Welcome to <span className="text-emerald-400">CricketPro Academy</span>
-          </h1>
-          <p className="text-lg mb-6">
-            Unlock your true potential with expert coaching, state-of-the-art facilities, and personalized training
-            programs for every level.
-          </p>
-          <div className="flex space-x-4">
-            <Link
-              to="#"
-              className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md shadow-md transition-transform transform hover:scale-105"
-            >
-              Get Started
-            </Link>
-            <Link
-              to="#"
-              className="bg-gray-300 hover:bg-gray-400 text-gray-900 px-6 py-3 rounded-md shadow-md transition-transform transform hover:scale-105"
-            >
-              Learn More
-            </Link>
-          </div>
+    <div className="relative bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+          <svg
+            className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+            fill="currentColor"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <polygon points="50,0 100,0 50,100 0,100" />
+          </svg>
+
+          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+            <div className="sm:text-center lg:text-left">
+              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                <span className="block xl:inline">Elevate your game at</span>{" "}
+                <span className="block text-emerald-600 xl:inline">KYCA Academy</span>
+              </h1>
+              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                Unleash your potential with world-class coaching, cutting-edge facilities, and personalized training
+                programs for all skill levels.
+              </p>
+              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                <div className="rounded-md shadow">
+                  <Link
+                    href="#"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 md:py-4 md:text-lg md:px-10"
+                  >
+                    Start Your Journey
+                  </Link>
+                </div>
+                <div className="mt-3 sm:mt-0 sm:ml-3">
+                  <Link
+                    href="#"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-emerald-700 bg-emerald-100 hover:bg-emerald-200 md:py-4 md:text-lg md:px-10"
+                  >
+                    Explore Programs
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-    </div>
-  );
+      <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+        <img
+          className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
+          src={HERO}
+          alt="Cricket player batting"
+          width={800}
+          height={600}
+        />
+      </div>
+    </div>
+  );
 }

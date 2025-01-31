@@ -5,6 +5,7 @@ import { Facebook, Instagram } from "lucide-react";
 import Dialogbox from "./Dialogbox"; // Import Dialogbox
 import WhatsAppIcon from "./ui/whatsappicon.jsx";
 import axios from "axios";
+import axiosInstance from "../axios.js";
 
 const Footer = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -13,7 +14,7 @@ const Footer = () => {
   useEffect(() => {
     const fetchLinks = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/user/links");
+        const response = await axiosInstance.get("/api/user/links");
         if (response.data[0]) {
           setLinks(response.data[0]);
         }
@@ -98,7 +99,7 @@ const Footer = () => {
         {/* Footer Text */}
         <div className="mt-8 md:mt-0 text-center md:text-left">
           <p className="text-base text-gray-500">
-            2023 CricketPro Academy. All rights reserved.
+            2025 KYCA Academy. All rights reserved.
           </p>
         </div>
       </footer>

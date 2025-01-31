@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS CSS
-import axios from "axios"; // Assuming you're using Axios to fetch data
 import axiosInstance from "../axios";
 
 const Testimonial = () => {
