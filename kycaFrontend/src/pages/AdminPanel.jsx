@@ -657,13 +657,13 @@ const handleChange = (e) => {
       </div>
 
 
-      <div className="admin-edit-links">
+      <div className="admin-edit-links bg-white">
   <h2 className="text-xl font-bold mb-4">Edit Social Links</h2>
-  <form className="edit-links-form" onSubmit={handleSubmit}>
-    <div className="form-group">
-      <label htmlFor="facebook" className="text-black">{'Facebook:\t'} </label>
+  <form className="edit-links-form space-y-4" onSubmit={handleSubmit}>
+    <div className="form-group flex flex-col">
+      <label htmlFor="facebook" className="text-black font-medium mb-2">Facebook:</label>
       <input
-        className="bg-gray-800 text-white border border-gray-600 p-2 rounded-lg"
+        className="bg-gray-100 text-black border border-gray-300 p-2 rounded-lg"
         type="url"
         id="facebook"
         name="facebook"
@@ -673,10 +673,10 @@ const handleChange = (e) => {
         required
       />
     </div>
-    <div className="form-group">
-      <label htmlFor="instagram" className="text-black">{'Instagram:\t'}</label>
+    <div className="form-group flex flex-col">
+      <label htmlFor="instagram" className="text-black font-medium mb-2">Instagram:</label>
       <input
-        className="bg-gray-800 text-white border border-gray-600 p-2 rounded-lg"
+        className="bg-gray-100 text-black border border-gray-300 p-2 rounded-lg"
         type="url"
         id="instagram"
         name="instagram"
@@ -686,10 +686,10 @@ const handleChange = (e) => {
         required
       />
     </div>
-    <div className="form-group">
-      <label htmlFor="whatsapp" className="text-black">{'WhatsApp:\t'}</label>
+    <div className="form-group flex flex-col">
+      <label htmlFor="whatsapp" className="text-black font-medium mb-2">WhatsApp:</label>
       <input
-        className="bg-gray-800 text-white border border-gray-600 p-2 rounded-lg"
+        className="bg-gray-100 text-black border border-gray-300 p-2 rounded-lg"
         type="url"
         id="whatsapp"
         name="whatsapp"
@@ -699,10 +699,10 @@ const handleChange = (e) => {
         required
       />
     </div>
-    <div>
+    <div className="mt-4">
       <button
         type="submit"
-        className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded"
+        className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg shadow"
       >
         Submit
       </button>
