@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { userState } from "../atoms";
+import axiosInstance from "../axios";
 
 const AdminPanel = () => {
   const user=useRecoilValue(userState);
@@ -39,6 +39,7 @@ const [email, setEmail] = useState("");
   const [coachName,setCoachName]=useState("");
   const [coachImage,setCoachImage]=useState(null);
   const [coachPhone,setCoachPhone]=useState(null);
+  const [coachDescription,setCoachDescription]=useState(null);
   const [coachPreview, setCoachPreview] = useState(null);
 
 
@@ -47,7 +48,7 @@ const [email, setEmail] = useState("");
     const fetchAdmins = async () => {
       try {
         const token = localStorage.getItem("jwtToken"); // Retrieve the token from local storage
-        const response = await axios.get("http://localhost:3000/api/user/getAdmins", {
+        const response = await axiosInstance.get("/api/user/getAdmins", {
           headers: {
             Authorization: `Bearer ${token}`, // Include the JWT in the Authorization header
           },
@@ -64,7 +65,7 @@ const [email, setEmail] = useState("");
 
     const fetchGems = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/gems"); 
+        const response = await axiosInstance.get("/api/gems"); 
         setGems(response.data|| []);
       } catch (err) {
         setError("Failed to fetch gems");
@@ -72,7 +73,7 @@ const [email, setEmail] = useState("");
     };
     const fetchCoaches=async()=>{
       try{
-        const response=await axios.get("http://localhost:3000/api/coach");
+        const response=await axiosInstance.get("/api/coach");
         setCoaches(response.data || []);
       }catch(err){
         setError("Failed to fetch coaches")
@@ -101,7 +102,7 @@ const [email, setEmail] = useState("");
 useEffect(()=>{  
   const fetchLinks = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/user/links"); 
+    const response = await axiosInstance.get("/api/user/links"); 
     setLinks(response.data[0]);
     console.log(links);
   } catch (err) {
@@ -114,7 +115,7 @@ fetchLinks();
 
 const fetchFeedbacks = async()=>{
   try{
-    const response = await axios.get('http://localhost:3000/api/admin/getAllFeedback')
+    const response = await axiosInstance.get('/api/admin/getAllFeedback')
     console.log(response.data.feedback)
     setFeedbacks(response.data.feedback)
   }
@@ -125,7 +126,7 @@ const fetchFeedbacks = async()=>{
 
   const fetchInquiries = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/inquiries");
+      const response = await axiosInstance.get("/api/inquiries");
       setInquiries(response.data);
       setLoading(false);
     } catch (err) {
@@ -135,7 +136,7 @@ const fetchFeedbacks = async()=>{
   };
   const handleDeleteInquiries = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/inquiries/${id}`);
+      await axiosInstance.delete(`/api/inquiries/${id}`);
       setInquiries((prevInquiries) =>
         prevInquiries.filter((inquiry) => inquiry.id !== id)
       );
@@ -148,7 +149,7 @@ const fetchFeedbacks = async()=>{
 
   const handleDeleteFeedback = async(id)=>{
     try{
-      await axios.post('http://localhost:3000/api/admin/delFeedback' , {id})
+      await axiosInstance.post('/api/admin/delFeedback' , {id})
       setSuccess("Feedback deleted!")
       setListChange(true); 
     }
@@ -160,7 +161,7 @@ const fetchFeedbacks = async()=>{
 
   const handleChooseFeedback = async(id,choice) =>{
     try{
-      await axios.post('http://localhost:3000/api/admin/chooseFeedback' , {id})
+      await axiosInstance.post('/api/admin/chooseFeedback' , {id})
       setSuccess(`Feedback ${choice == 1?'chosen':'unchosen'}`)
     }
     catch(e)
@@ -171,7 +172,7 @@ const fetchFeedbacks = async()=>{
 
   const handleAddAdmin = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/user/addAdmin", { email });
+      const response = await axiosInstance.post("/api/user/addAdmin", { email });
       if (response.data.msg === "Invalid email" || response.data.msg === "No user found") {
         setSuccess("Failed to add admin");
       } else {
@@ -186,7 +187,7 @@ const fetchFeedbacks = async()=>{
 
   const handleRemoveAdmin = async (AdminEmail) => {
     try {
-      const response = await axios.post(`http://localhost:3000/api/user/delAdmin`, { email: AdminEmail });
+      const response = await axiosInstance.post(`/api/user/delAdmin`, { email: AdminEmail });
       setSuccess("Admin removed successfully.");
       setListChange(true); // Trigger re-fetch
     } catch (err) {
@@ -206,7 +207,7 @@ const fetchFeedbacks = async()=>{
     }
 
     try {
-      await axios.post("http://localhost:3000/api/gems", formData, {
+      await axiosInstance.post("/api/gems", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setGemTeam("");
@@ -222,7 +223,7 @@ const fetchFeedbacks = async()=>{
 
   const handleDeleteGem = async (gemId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/gems/${gemId}`);
+      await axiosInstance.delete(`/api/gems/${gemId}`);
       setSuccess("Gem deleted successfully.");
       setListChange(true);
     } catch {
@@ -254,11 +255,12 @@ const fetchFeedbacks = async()=>{
     const formData=new FormData();
     formData.append("name", coachName);
     formData.append("phone",coachPhone);
+    formData.append("description",coachDescription);
     if(coachImage){
       formData.append("img",coachImage);
     }
     try {
-      await axios.post("http://localhost:3000/api/coach", formData, {
+      await axiosInstance.post("/api/coach", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setSuccess("Coach added successfully.");
@@ -266,6 +268,7 @@ const fetchFeedbacks = async()=>{
       setCoachPreview(null);
       setCoachName("");
       setCoachPhone("");
+      setCoachDescription("");
     } catch {
       setError("Failed to add Coach. Please try again.");
     }
@@ -275,7 +278,7 @@ const fetchFeedbacks = async()=>{
 //Delete coach
   const handleDeleteCoach = async (coachId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/coach/${coachId}`);
+      await axiosInstance.delete(`/api/coach/${coachId}`);
       setSuccess("Coach deleted successfully.");
       setListChange(true);
     } catch {
@@ -307,7 +310,7 @@ const handleChange = (e) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try{
-      axios.put(`http://localhost:3000/api/admin/links/0`,{facebook:links.facebook,instagram:links.instagram,whatsapp:links.whatsapp});
+      axiosInstance.put(`/api/admin/links/0`,{facebook:links.facebook,instagram:links.instagram,whatsapp:links.whatsapp});
       setSuccess("links updated successfully")
     }catch(err){
       setError("failed to update links");
@@ -485,6 +488,7 @@ const handleChange = (e) => {
               <tr className="bg-emerald-700">
                 <th className="text-white border border-gray-600 p-2">ID</th>
                 <th className="text-white border border-gray-600 p-2">Name</th>
+                <th className="text-white border border-gray-600 p-2">Team</th>
                 <th className="text-white border border-gray-600 p-2">Image</th>
                 <th className="text-white border border-gray-600 p-2">Actions</th>
               </tr>
@@ -494,8 +498,9 @@ const handleChange = (e) => {
                 <tr key={gem.id} className="hover:bg-emerald-500">
                   <td className="border border-gray-600 text-center p-2">{gem.id}</td>
                   <td className="border border-gray-600 text-center p-2">{gem.name}</td>
+                  <td className="border border-gray-600 text-center p-2">{gem.team}</td>
                   <td className="border border-gray-600 text-center p-2">
-                    { <img src={`http://localhost:3000${gem.img}`} alt={gem.name} className="w-16 h-16 object-cover" />}
+                    { <img src={`${import.meta.env.VITE_BACKEND_URL}${gem.img}`} alt={gem.name} className="w-16 h-16 object-cover" />}
                   </td>
                   <td className="border border-gray-600 text-center p-2">
                     <button
@@ -590,6 +595,13 @@ const handleChange = (e) => {
           onChange={(e) => setCoachPhone(e.target.value)}
         />
         <input
+          type="text"
+          placeholder="Enter Coach Description"
+          className="p-2 border border-gray-600 rounded text-black"
+          value={coachDescription}
+          onChange={(e) => setCoachDescription(e.target.value)}
+        />
+        <input
         type="file"
         accept="image/*" // Limit to images only
         className="p-2 border border-gray-600 rounded text-black"
@@ -626,6 +638,7 @@ const handleChange = (e) => {
                 <th className="text-white border border-gray-600 p-2">ID</th>
                 <th className="text-white border border-gray-600 p-2">Name</th>
                 <th className="text-white border border-gray-600 p-2">Phone</th>
+                <th className="text-white border border-gray-600 p-2">Description</th>
                 <th className="text-white border border-gray-600 p-2">Image</th>
                 <th className="text-white border border-gray-600 p-2">Actions</th>
               </tr>
@@ -636,8 +649,9 @@ const handleChange = (e) => {
                   <td className="border border-gray-600 text-center p-2">{coach.id}</td>
                   <td className="border border-gray-600 text-center p-2">{coach.name}</td>
                   <td className="border border-gray-600 text-center p-2">{coach.phone}</td>
+                  <td className="border border-gray-600 text-center p-2">{coach.description}</td>
                   <td className="border border-gray-600 text-center p-2">
-                    { <img src={`http://localhost:3000${coach.img}`} alt={coach.name} className="w-16 h-16 object-cover" />}
+                    { <img src={`${import.meta.env.VITE_BACKEND_URL}${coach.img}`} alt={coach.name} className="w-16 h-16 object-cover" />}
                   </td>
                   <td className="border border-gray-600 text-center p-2">
                     <button

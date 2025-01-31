@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
+import axiosInstance from "../axios"
 
 const Gems = () => {
   const [gems, setGems] = useState([])
@@ -9,7 +10,7 @@ const Gems = () => {
   useEffect(() => {
     const fetchGems = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/gems")
+        const response = await axiosInstance.get("/api/gems")
         setGems(response.data)
         setLoading(false)
       } catch (error) {
@@ -85,7 +86,7 @@ const Gems = () => {
                   >
                     <div className="relative h-64 w-full overflow-hidden">
                       <img
-                        src={`http://localhost:3000${gem.img}`}
+                        src={`${import.meta.env.VITE_BACKEND_URL}${gem.img}`}
                         alt={`${gem.name}'s profile`}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
@@ -94,7 +95,7 @@ const Gems = () => {
                     <div className="relative w-full bg-white p-6 text-center">
                       <div className="absolute -top-8 left-1/2 h-16 w-16 -translate-x-1/2 transform overflow-hidden rounded-full border-4 border-white shadow-lg">
                         <img
-                          src={`http://localhost:3000${gem.img}`}
+                          src={`${import.meta.env.VITE_BACKEND_URL}${gem.img}`}
                           alt={`${gem.name}'s avatar`}
                           className="h-full w-full object-cover"
                         />

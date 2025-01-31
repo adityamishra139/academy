@@ -20,12 +20,12 @@ const router = Router();
 const upload = multer({ storage });
 
 router.post('/',authenticate, upload.single('img'), async (req: Request, res: Response) => {
-  const { name, phone } = req.body;
+  const { name, phone,description } = req.body;
   const img = req.file ? `/uploads/${req.file.filename}` : '';
 
   try {
     const coach = await prisma.coach.create({
-      data: { name, phone, img },
+      data: { name, phone, img,description },
     });
     res.status(201).json(coach);
   } catch (error) {
@@ -66,13 +66,13 @@ router.get('/:id', async (req: Request, res: Response) => {
 //update existing coach
 router.put('/:id',authenticate, upload.single('img'), async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, phone } = req.body;
+  const { name, phone ,description} = req.body;
   const img = req.file ? `/uploads/${req.file.filename}` : undefined; // New image path (if uploaded)
 
   try {
     const coach = await prisma.coach.update({
       where: { id: Number(id) },
-      data: { name, phone, img },
+      data: { name, phone, img,description },
     });
     res.status(200).json(coach); // Send the updated coach
   } catch (error) {

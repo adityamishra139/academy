@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "../atoms";
-import axios from "axios";
+import axiosInstance from "../axios";
 
 const ContactUs = () => {
 
@@ -17,7 +17,7 @@ const ContactUs = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try{
-      const response = await axios.post('http://localhost:3000/api/inquiries/',{name,email,message,phone})
+      const response = await axiosInstance.post('/api/inquiries/',{name,email,message,phone})
       console.log(response.data);
       if(response.status === 201)
       {

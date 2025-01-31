@@ -4,6 +4,7 @@ import { useSetRecoilState } from "recoil";
 import {jwtDecode} from "jwt-decode";
 import { userState } from "../atoms";
 import axios from "axios";
+import axiosInstance from "../axios";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const SignIn = () => {
 
   const fetchDetails = async (email) => {
     try {
-      const user = await axios.post("http://localhost:3000/api/user/aboutUser", { email });
+      const user = await axiosInstance.post("/api/user/aboutUser", { email });
       setUser({
         id: user.data.id,
         name: user.data.name,
@@ -29,7 +30,7 @@ const SignIn = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/api/user/signin", {
+      const res = await axiosInstance.post("/api/user/signin", {
         email: email,
         password: password,
       });
