@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import HERO from "./../assets/HERO.jpg"
+import {HashLink} from 'react-router-hash-link'
 export default function Hero() {
   return (
     <div className="relative bg-white overflow-hidden">
@@ -28,19 +29,19 @@ export default function Hero() {
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
                   <Link
-                    href="#"
+                    to="/contact"
                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 md:py-4 md:text-lg md:px-10"
                   >
                     Start Your Journey
                   </Link>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <Link
-                    href="#"
+                  <HashLink
+                    to="/#ourPrograms"
                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-emerald-700 bg-emerald-100 hover:bg-emerald-200 md:py-4 md:text-lg md:px-10"
                   >
                     Explore Programs
-                  </Link>
+                  </HashLink>
                 </div>
               </div>
             </div>

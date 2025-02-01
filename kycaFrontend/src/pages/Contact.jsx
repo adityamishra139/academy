@@ -1,177 +1,161 @@
-import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { userState } from "../atoms";
+import { useState } from "react";
+import axios from "axios";
+import { Mail, Phone, MapPin } from "lucide-react";
+import {useRecoilValue} from 'recoil'
+import {userState} from '../atoms'
 import axiosInstance from "../axios";
+// Button Component
+const Button = ({ children, ...props }) => (
+  <button
+    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+    {...props}
+  >
+    {children}
+  </button>
+);
+
+// Input Component
+const Input = (props) => (
+  <input
+    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    {...props}
+  />
+);
+
+// Textarea Component
+const Textarea = (props) => (
+  <textarea
+    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    {...props}
+  />
+);
+
+// Card Component
+const Card = ({ children, title }) => (
+  <div className="bg-white shadow-md rounded-lg overflow-hidden">
+    {title && (
+      <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+      </div>
+    )}
+    <div className="px-6 py-4">{children}</div>
+  </div>
+);
 
 const ContactUs = () => {
-
   const user = useRecoilValue(userState);
-  const [name,setName] = useState(user.name || "")
-  const [email , setEmail] = useState(user.email || "")
-  const [phone , setPhone] = useState("");
-  const [message , setMessage] = useState("");
+  const [name, setName] = useState(user.name || "");
+  const [email, setEmail] = useState(user.email || "");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
-  const handleSubmit = async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    try{
-      const response = await axiosInstance.post('/api/inquiries/',{name,email,message,phone})
+    try {
+      const response = await axiosInstance.post("/api/inquiries/", { name, email, message, phone });
       console.log(response.data);
-      if(response.status === 201)
-      {
-        setName(user.name||"")
-        setMessage("")
-        setPhone("")
-        setEmail(user.email||"")
+      if (response.status === 201) {
+        setName(user.name || "");
+        setMessage("");
+        setPhone("");
+        setEmail(user.email || "");
       }
       alert("Enquiry Submitted!");
-    }
-    catch(e)
-    {
-      alert('Failed to send enquiry.')
+    } catch (e) {
+      alert("Failed to send enquiry.");
       console.error(e);
-    }
-    finally{
+    } finally {
       setIsSubmitting(false);
     }
-  }
+  };
 
   return (
-    <div className="bg-black text-green-500 min-h-screen">
-      {/* Contact Us Section */}
-      <section
-        className="py-16"
-        data-aos="fade-up"
-        data-aos-duration="1000"
-        data-aos-once="true"
-      >
-        <div className="container mx-auto text-center px-4">
-          <h2 className="text-4xl font-extrabold mb-8 tracking-wide">
-            Contact Us
-          </h2>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            We'd love to hear from you! Whether you have questions about
-            enrolling in our programs, becoming a coach, or anything else, feel
-            free to reach out to us using the form below.
-          </p>
-        </div>
-      </section>
+    <div className="bg-[#F8F9FA] min-h-screen py-12">
+      <div className="container mx-auto px-4">
+        <h1 className="text-4xl font-bold text-center mb-12">Contact Us</h1>
 
-      {/* Contact Form Section */}
-      <section
-        className="py-16 bg-black"
-        data-aos="fade-right"
-        data-aos-duration="1200"
-      >
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-extrabold text-center mb-12 tracking-wide text-green-500">
-            Get in Touch
-          </h2>
-          <div className="max-w-2xl mx-auto space-y-8">
-            <form
-              onSubmit={(e)=>handleSubmit(e)}
-              action="#"
-              method="POST"
-              className="space-y-6 bg-black p-8 rounded-lg shadow-lg"
-            >
-              <div className="flex flex-col">
-                <label htmlFor="name" className="text-gray-300">
+        <div className="grid md:grid-cols-2 gap-12">
+          <Card title="Get in Touch">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Name
                 </label>
-                <input
+                <Input
                   type="text"
                   id="name"
-                  name="name"
                   value={name}
-                  onChange={(e)=>setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Your full name"
                   required
-                  className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
                 />
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="email" className="text-gray-300">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email
                 </label>
-                <input
+                <Input
                   type="email"
                   id="email"
-                  name="email"
                   value={email}
-                  onChange={(e)=>setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
-                  className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
                 />
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="phone" className="text-gray-300">
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                   Phone Number
                 </label>
-                <input
+                <Input
                   type="tel"
                   id="phone"
-                  name="phone"
                   value={phone}
-                  onChange={(e)=>{setPhone(e.target.value)}}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder="1234567890"
                   pattern="[0-9]{10}"
                   required
-                  className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
                 />
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="enquiry" className="text-gray-300">
+              <div>
+                <label htmlFor="enquiry" className="block text-sm font-medium text-gray-700">
                   Enquiry
                 </label>
-                <textarea
+                <Textarea
                   id="enquiry"
-                  name="enquiry"
                   value={message}
-                  onChange={(e)=>setMessage(e.target.value)}
+                  onChange={(e) => setMessage(e.target.value)}
                   placeholder="Write your message here..."
-                  rows="5"
+                  rows={5}
                   required
-                  className="mt-2 px-4 py-3 bg-gray-700 text-white rounded-md"
-                ></textarea>
+                />
               </div>
-              <button
-  type="submit"
-  disabled={isSubmitting}
-  className={`bg-green-500 text-white px-6 py-3 rounded-md ${
-    isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"
-  } transition duration-300`}
->
-  {isSubmitting ? "Submitting..." : "Enquire"}
-</button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Send Enquiry"}
+              </Button>
             </form>
-          </div>
-        </div>
-      </section>
+          </Card>
 
-      {/* Contact Details Section */}
-      <section className="py-16" data-aos="fade-left" data-aos-duration="1200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-extrabold text-center mb-12 tracking-wide">
-            Our Location
-          </h2>
-          <div className="max-w-2xl mx-auto space-y-6 text-gray-300">
-            <p className="flex items-center gap-4">
-              <span className="text-green-500">&#x1F3E0;</span> Karnataka Youth
-              Cricket Academy, 123 Main Street, Bangalore, India
-            </p>
-            <p className="flex items-center gap-4">
-              <span className="text-green-500">&#x1F4E7;</span>{" "}
-              info@karnatakacricketacademy.com
-            </p>
-            <p className="flex items-center gap-4">
-              <span className="text-green-500">&#x1F4DE;</span> +91 123 456 7890
-            </p>
-          </div>
+          <Card title="Our Location">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <MapPin className="text-blue-600" />
+                <p>Karnataka Youth Cricket Academy, 123 Main Street, Bangalore, India</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Mail className="text-blue-600" />
+                <p>info@karnatakacricketacademy.com</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Phone className="text-blue-600" />
+                <p>+91 123 456 7890</p>
+              </div>
+            </div>
+          </Card>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

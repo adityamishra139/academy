@@ -5,8 +5,8 @@ import activity2 from "../assets/activity2.jpg";
 import founder from "../assets/founder.jpg";
 import "aos/dist/aos.css";
 import AOS from "aos";
-import axios from "axios";
 import { Card, CardContent, CardTitle, CardDescription } from "../components/Card";
+import axiosInstance from "../axios";
 
 
 AOS.init();
@@ -19,7 +19,7 @@ function About() {
   useEffect(() => {
     const fetchCoaches = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/coach");
+        const response = await axiosInstance.get('/api/coach');
         setCoaches(response.data);
         setLoading(false);
       } catch (error) {
@@ -134,7 +134,7 @@ function About() {
             >
               <div className="flex justify-center">
                 <img
-                  src={`http://localhost:3000${coach.img}`}
+                  src={`${import.meta.env.VITE_BACKEND_URL}${coach.img}`}
                   alt={`Coach ${index + 1}`}
                   className="w-32 h-32 rounded-full shadow-lg transition-transform transform hover:scale-110"
                 />
