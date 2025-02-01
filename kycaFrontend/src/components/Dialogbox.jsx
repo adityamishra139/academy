@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../atoms';
-import axios from 'axios';
+import axiosInstance from '../axios';
 
 const Dialogbox = ({ onClose }) => {
   const [rating, setRating] = useState(0);
@@ -15,7 +15,7 @@ const Dialogbox = ({ onClose }) => {
     if(user.name !== "")
     {
       try{
-        const response = await axios.post('http://localhost:3000/api/user/postFeedback',{email:user.email, name:formData.name , rating:rating , message:formData.message})
+        const response = await axiosInstance.post('/api/user/postFeedback',{email:user.email, name:formData.name , rating:rating , message:formData.message})
         alert('Feedback submitted! Thank you.');
       }
       catch(e)

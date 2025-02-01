@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../atoms";
 import axios from "axios";
+import axiosInstance from "../axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const SignUp = () => {
     e.preventDefault();
     
     try{
-        const res = await axios.post('http://localhost:3000/api/user/signup',{name:name, email:email, password:password})
+        const res = await axiosInstance.post('/api/user/signup',{name:name, email:email, password:password})
 
         const obj = res.data.user;
 

@@ -15,6 +15,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/Signup"; 
 import { userState } from "./atoms";
 import { useSetRecoilState } from "recoil";
+import axiosInstance from "./axios";
 
 function App() {
   const resetUser = useSetRecoilState(userState);
@@ -55,7 +56,7 @@ function App() {
 
     const fetchDetails = async (email) => {
       try {
-        const user = await axios.post("http://localhost:3000/api/user/aboutUser", { email });
+        const user = await axiosInstance.post("/api/user/aboutUser", { email });
         setUser({
           id: user.data.id,
           name: user.data.name,
@@ -126,7 +127,7 @@ function App() {
   }, [setUser, navigate]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
       <main className="flex-grow">
         <Routes>
